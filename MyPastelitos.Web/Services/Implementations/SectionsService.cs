@@ -58,14 +58,14 @@ namespace MyPastelitos.Web.Services.Implementations
 
                 if (section == null)
                 {
-                    return Response<object>.Failure($"No existe Seccion con id {dto.SectionId}");
+                    return Response<object>.Failure($"No existe Producto con id {dto.SectionId}");
                 }
 
                 section.IsHidden = dto.Hide;
                 _context.Sections.Update(section);
                 await _context.SaveChangesAsync();
 
-                return Response<object>.Success($"Seccion con id {dto.SectionId} actualizada correctamente");
+                return Response<object>.Success($"Producto ha sido actualizado correctamente");
 
             }
             catch (Exception ex)
@@ -83,6 +83,7 @@ namespace MyPastelitos.Web.Services.Implementations
                 Id = result.Result.Id,
                 Name = result.Result.Name,
                 Description = result.Result.Description,
+                Price = result.Result.Price,
                 IsHidden = result.Result.IsHidden
             };
 

@@ -1,4 +1,5 @@
-﻿using MyPastelitos.Web.Data.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using MyPastelitos.Web.Data.Abstractions;
 using System.ComponentModel.DataAnnotations;
 
 namespace MyPastelitos.Web.Data.Entities
@@ -14,7 +15,11 @@ namespace MyPastelitos.Web.Data.Entities
 
             [MaxLength(128)]
 
-            public string? Description { get; set; } 
+            public string? Description { get; set; }
+
+            
+            [Precision(18, 2)]
+            public decimal Price { get; set; }
 
             public bool IsHidden {  get; set; }
         }

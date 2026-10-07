@@ -65,13 +65,16 @@
 
                </form>
 
-              <table class="table table-bordered">  
+                <table class="table table-bordered table-sm">
                     <thead> 
 
                        <tr>
 
-                        <th>Seccion</th>
+                        <th>Producto</th>
                         <th>Descripcion</th>
+                        <th>Precio</th>
+
+                      
                         <th></th>
 
                         </tr>
@@ -87,6 +90,7 @@
                             <tr class="@rowClass">
                                 <td>@item.Name</td>
                                 <td>@item.Description</td>
+                                <td>$ @item.Price.ToString("N2")</td>
                                 <td>
                                     <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@item.Id">
                                         <i class="bi bi-pencil"></i>

@@ -17,6 +17,8 @@ namespace MyPastelitos.Web.DTOs.Section
         [MaxLength(128, ErrorMessage = "El campo {0} no puede exceder de 128 caracteres")]
         public string? Description { get; set; }
 
+        public decimal Price { get; set; }
+
         public bool IsHidden { get; set; } 
 
 

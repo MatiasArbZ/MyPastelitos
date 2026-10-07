@@ -7,6 +7,8 @@ using MyPastelitos.Web.Core.Pagination;
 
 namespace MyPastelitos.Web.Services
 {
+
+    //TODO: Cambiar el nombre de producto por entidad, ya que este servicio es genérico y no solo para productos
     public class CustomQueryableOperationsService
     {
         private readonly DataContext _context;
@@ -31,7 +33,7 @@ namespace MyPastelitos.Web.Services
                 await _context.AddAsync(entity);
                 await _context.SaveChangesAsync();
 
-                return Response<TDto>.Success(dto, "Entidad creada con éxito");
+                return Response<TDto>.Success(dto, "Producto creado con éxito");
             }
             catch (Exception ex)
             {
@@ -57,7 +59,7 @@ namespace MyPastelitos.Web.Services
 
                 await _context.SaveChangesAsync();
 
-                return Response<TDto>.Success(dto, "Entidad actualizada con éxito");
+                return Response<TDto>.Success(dto, "Producto actualizado con éxito");
             }
             catch (Exception ex)
             {
@@ -74,12 +76,12 @@ namespace MyPastelitos.Web.Services
 
                 if (entity == null)
                 {
-                    return Response<object>.Failure($"No existe registro con el ID {id}");
+                    return Response<object>.Failure($"No existe Producto con el ID {id}");
                 }
 
                 _context.Remove(entity);
                 await _context.SaveChangesAsync();
-                return Response<object>.Success("Registro eliminada con éxito");
+                return Response<object>.Success("Producto eliminado con éxito");
             }
             catch (Exception ex)
             {
@@ -99,12 +101,12 @@ namespace MyPastelitos.Web.Services
 
                 if (entity == null)
                 {
-                    return Response<TDto>.Failure($"No existe registro con el ID {id}");
+                    return Response<TDto>.Failure($"No existe Producto con el ID {id}");
                 }
 
                 TDto dto = _mapper.Map<TDto>(entity);
 
-                return Response<TDto>.Success(dto, "Registro obtenido con éxito");
+                return Response<TDto>.Success(dto, "Producto obtenido con éxito");
 
             }
             catch (Exception ex)
@@ -138,7 +140,7 @@ namespace MyPastelitos.Web.Services
                     Filter = request.Filter
                 };
 
-                return Response<PaginationResponse<TDto>>.Success(dto, "Registro obtenido con éxito");
+                return Response<PaginationResponse<TDto>>.Success(dto, "Producto obtenido con éxito");
 
             }
             catch (Exception ex)

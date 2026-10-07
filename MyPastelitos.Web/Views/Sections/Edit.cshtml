@@ -1,8 +1,4 @@
 ﻿@model UpdateSectionDTO
-
-
-
-
 @{
     ViewData["Title"] = "Editar Producto";
 }
@@ -33,7 +29,7 @@
 
         <div class="card-body">
 
-        <<form asp-action="Edit" method="POST" class="row g-3">
+        <form asp-action="Edit" method="POST" class="row g-3">
 
             <input type="hidden" asp-for="Id" />
 
@@ -47,11 +43,29 @@
 
                 <div class ="col-md-12">
                     <div class="form-floating">     
+
+                <div class ="col-md-12">
+                    <div class="form-floating">     
                            <input asp-for="Description" class= "form-control" placeholder="@Html.DisplayFor(dto => dto.Description)" />
                            <label asp-for="Description" class="form-label"></label>
                             <span asp-validation-for="Description" class="text-danger"></span>
                      </div>
                 </div>
+                
+                <div class="col-md-12">
+                      <div class="form-floating">
+                            <input asp-for="Price"
+                             class="form-control"
+                             placeholder="Precio"
+                             type="number"
+                             step="0.01"
+                             min="0" />
+                      <label asp-for="Price" class="form-label">Precio</label>
+                      <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                </div>
+
+        
 
                             <div class="text-center mt-3">
                                    <button class="btn btn-primary" type="submit">Guardar</button>

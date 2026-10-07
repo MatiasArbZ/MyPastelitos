@@ -12,8 +12,8 @@ using MyPastelitos.Web.Data;
 namespace MyPastelitos.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20261007070716_SectionsTable")]
-    partial class SectionsTable
+    [Migration("20261007195726_ProductTable")]
+    partial class ProductTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,9 @@ namespace MyPastelitos.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(32)
                         .HasColumnType("nvarchar(32)");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 

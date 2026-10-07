@@ -78,6 +78,7 @@ namespace MyPastelitos.Web.Controllers
                     Id = response.Result.Id,
                     Name = response.Result.Name,
                     Description = response.Result.Description,
+                    Price = response.Result.Price,
                     IsHidden = response.Result.IsHidden
                 };
 
@@ -92,6 +93,7 @@ namespace MyPastelitos.Web.Controllers
                 _notyfService.Error("Debe ajustar los errores de validacion");
                 return View(dto);
             }
+
 
             Response<SectionDTO> response = await _sectionsService.UpdateAsync(dto);
 
