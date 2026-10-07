@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
+using Microsoft.EntityFrameworkCore;
 using MyPastelitos.Web.Data;
 using MyPastelitos.Web.Services.Abstractions;
 using MyPastelitos.Web.Services.Implementations;
@@ -19,7 +21,17 @@ namespace MyPastelitos.Web
             builder.Services.AddAutoMapper(typeof(Program));
 
             // Services
-           // AddServices(builder);
+
+            // Toast Notifications
+            builder.Services.AddNotyf(config =>
+            {
+                config.DurationInSeconds = 10;
+                config.Position = NotyfPosition.BottomRight;
+                config.IsDismissable = true;
+            });
+
+
+            // AddServices(builder);
 
             return builder;
 
@@ -29,5 +41,14 @@ namespace MyPastelitos.Web
         {
             builder.Services.AddScoped<ISectionsService, SectionsService>();
         }
+
+        public static WebApplication AddCustomWebApplicationConfiguration(this WebApplication app)
+        {
+           app.UseNotyf();
+            return app;
+        }
+
+
+
     }
 }

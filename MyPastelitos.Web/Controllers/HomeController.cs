@@ -1,3 +1,4 @@
+using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 using MyPastelitos.Web.Models;
 using System.Diagnostics;
@@ -6,8 +7,11 @@ namespace MyPastelitos.Web.Controllers
 {
     public class HomeController : Controller
     {
+        
+
         public IActionResult Index()
         {
+          
             return View();
         }
 
