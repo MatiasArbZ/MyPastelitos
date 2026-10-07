@@ -4,7 +4,7 @@ namespace MyPastelitos.Web.DTOs.Section
     public class ToggleSectionStatusDTO
     {
         [Required (ErrorMessage = "El campo {0} es requerido")]
-        public Guid Id { get; set; }
+        public Guid SectionId { get; set; }
 
         public bool Hide { get; set; } = true;
     }

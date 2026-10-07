@@ -7,11 +7,13 @@ namespace MyPastelitos.Web.DTOs.Section
 
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         [MaxLength(32, ErrorMessage ="El campo {0} no puede exceder de 32 caracteres")]
+        [Display(Name = "Nombre del Producto")]
         public string Name { get; set; }
 
 
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         [MaxLength(128, ErrorMessage ="El campo {0} no puede exceder de 128 caracteres")]
+        [Display(Name = "Descripción")]
         public string? Description { get; set; }
 
         public bool IsHidden { get; set; } = false;
