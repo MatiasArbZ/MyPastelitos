@@ -33,7 +33,7 @@ namespace MyPastelitos.Web.Core.Pagination
             List<T> items = await queryable.PaginateAsync<T>(request)
                                             .ToListAsync();
 
-            return new PagedList<T> (items, count, request.Page, request.RecordPerPage);
+            return new PagedList<T>(items, count, request.Page, request.RecordsPerPage);
         }
       
     }

@@ -114,9 +114,9 @@ namespace MyPastelitos.Web.Services
         }
 
 
-        public async Task<Response<PaginationResponse<TDto>>> GetPagedListAsync<TDto, TEntity>(PaginationRequest request, IQueryable<TEntity>? query = null) 
-            where TEntity : class
-            where TDto : class
+        public async Task<Response<PaginationResponse<TDto>>> GetPagedListAsync<TDto, TEntity>(PaginationRequest request, IQueryable<TEntity>? query = null)
+           where TEntity : class
+           where TDto : class
         {
             try
             {
@@ -125,7 +125,7 @@ namespace MyPastelitos.Web.Services
                 {
                     query = _context.Set<TEntity>().AsQueryable();
                 }
-               
+
                 PagedList<TEntity> list = await PagedList<TEntity>.ToPagedListASync(query, request);
 
                 PaginationResponse<TDto> dto = new PaginationResponse<TDto>
@@ -134,8 +134,8 @@ namespace MyPastelitos.Web.Services
                     CurrentPage = list.CurrentPage,
                     TotalPages = list.TotalPages,
                     RecordsPerPage = list.RecordsPerPage,
-                    TotalCount = list.TotalCount, 
-                   Filter = request.Filter
+                    TotalCount = list.TotalCount,
+                    Filter = request.Filter
                 };
 
                 return Response<PaginationResponse<TDto>>.Success(dto, "Registro obtenido con éxito");

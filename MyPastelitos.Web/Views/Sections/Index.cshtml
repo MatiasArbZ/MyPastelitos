@@ -1,0 +1,106 @@
+﻿@model PaginationResponse<SectionDTO>
+
+
+
+@{
+    ViewData["Title"] = "Secciones";
+}
+<div class="pagetitle">
+    <h1>@ViewData["Title"]</h1>
+    <nav>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">inicio</a></li>
+            <li class="breadcrumb-item active">@ViewData["Title"]</li>
+        </ol>
+    </nav>
+</div>
+
+<section class="section dashboard">
+
+    <div class="card">
+        <div class="card-header">
+
+            <div class="row">  
+               
+
+                 <h3 class="m-0 font-weight-bold text-primary col-md-11">@ViewData["Title"]</h3>
+
+                  <div class="col-md-1"> 
+                        <a asp-action="Create" class="btn-primary"><i class="bi bi-plus-circle"></i> </a>
+
+                  </div>
+
+            </div>
+        </div>
+
+        <div class="card-body at-3">
+                
+              <form asp-action="Index" class="navbar-search" method="get">  
+            
+                 <imput type="hidden" name="Page" value="@Model.CurrentPage"/>  
+
+                    <div class="row mt-3"> 
+
+                         <div class="col-md-auto">  
+                            <select asp-for="RecordsPerPage" class="form-select bg-Light border-0 small">
+                                 <option value="2" selected="@(Model.RecordsPerPage == 2)">2</option>
+                                 <option value="10" selected="@(Model.RecordsPerPage == 10)">10</option>
+                                 <option value="15" selected="@(Model.RecordsPerPage == 15)">15</option>
+                                 <option value="30" selected="@(Model.RecordsPerPage == 30)">30</option>
+                                 <option value="50" selected="@(Model.RecordsPerPage == 50)">50</option>
+                            </select>
+                          </div>
+
+                            <div class="col-md-10">
+                        <div class="input-group mb-3">
+                            <input type="text"
+                                   class="form-control bg-light border-0 small"
+                                   placeholder="Buscar..."
+                                   aria-label="search"
+                                   asp-for="Filter" />
+                                <button class="btn btn-primary"><i class="bi bi-search"></i></button>
+                               
+                                 </div>
+                          </div>
+
+               </form>
+
+              <table class="table table-bordered">  
+                    <thead> 
+
+                       <tr>
+
+                        <th>Seccion</th>
+                        <th>Descripcion</th>
+                        <th></th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (SectionDTO item in Model.List)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.Description</td>
+                                <td>
+                                    <a class="btn btn-sm btn-warning" asp-route-id="@item.Id">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+
+                                    <a class="btn btn-sm btn-danger" asp-route-id="@item.Id">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    
+                                </td>
+                            </tr>
+                        }
+                  
+              </table>
+            
+        </div>
+        
+        
+    </div>
+            
+    </section>

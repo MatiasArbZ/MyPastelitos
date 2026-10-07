@@ -20,9 +20,9 @@ namespace MyPastelitos.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            PaginationRequest request = PaginationRequest.Default;
+        public async Task<IActionResult> Index([FromQuery] PaginationRequest request)
+        { 
+
             Response<PaginationResponse<SectionDTO>> response = await _sectionsService.GetPaginationAsync(request);
 
             if(!response.IsSuccess)
@@ -31,7 +31,13 @@ namespace MyPastelitos.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return View("~/Views/Home/Sections/Index.cshtml", response.Result);
+            return View(response.Result);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
         }
     }
 }
