@@ -31,7 +31,7 @@ namespace MyPastelitos.Web
             });
 
 
-            // AddServices(builder);
+            AddServices(builder);
 
             return builder;
 

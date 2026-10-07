@@ -12,7 +12,7 @@ using MyPastelitos.Web.Data;
 namespace MyPastelitos.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20261007054107_SectionsTable")]
+    [Migration("20261007070716_SectionsTable")]
     partial class SectionsTable
     {
         /// <inheritdoc />

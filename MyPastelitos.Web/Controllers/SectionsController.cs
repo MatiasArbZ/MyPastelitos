@@ -31,7 +31,7 @@ namespace MyPastelitos.Web.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return View(response.Result);
+            return View("~/Views/Home/Sections/Index.cshtml", response.Result);
         }
     }
 }
