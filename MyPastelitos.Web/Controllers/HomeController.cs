@@ -19,7 +19,10 @@ namespace MyPastelitos.Web.Controllers
         {
             return View();
         }
-
+        /// <summary>
+        /// ////////////////////
+        /// </summary>
+        /// <returns></returns>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
