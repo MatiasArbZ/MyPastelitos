@@ -7,7 +7,7 @@
         public int RecordsPerPage{ get; set; }
         public string? Filter { get; set; }
         public int TotalCount  { get; set; }
-        public PagedList<T> MyProperty { get; set; }
+        public PagedList<T> List { get; set; }
         
 
         public bool HasPrevius => CurrentPage > 1;
