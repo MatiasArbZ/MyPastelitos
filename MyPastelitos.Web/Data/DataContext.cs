@@ -10,5 +10,6 @@ namespace MyPastelitos.Web.Data
 
         }
         public DbSet<Section> Sections { get; set; }
+        public DbSet<Recipe> Recipe { get; set; }
     }
 }

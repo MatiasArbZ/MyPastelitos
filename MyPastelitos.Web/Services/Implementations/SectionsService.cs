@@ -26,7 +26,7 @@ namespace MyPastelitos.Web.Services.Implementations
             return await CreateAsync<CreateSectionDTO, Section>(dto);
         }
 
-        public async Task<Response<object>> DeleteAsync(Guid id)
+        public async Task<Response> DeleteAsync(Guid id)
         {
             return await DeleteAsync<Section>(id);
         }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using MyPastelitos.Web.Data.Abstractions;
 using System.ComponentModel.DataAnnotations;
 
@@ -22,6 +23,11 @@ namespace MyPastelitos.Web.Data.Entities
             public decimal Price { get; set; }
 
             public bool IsHidden {  get; set; }
+
+        public static implicit operator Section(List<SelectListItem>v)
+        {
+            throw new NotImplementedException();
         }
+    }
     }
 

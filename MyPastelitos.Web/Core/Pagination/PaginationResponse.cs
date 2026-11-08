@@ -1,6 +1,8 @@
-﻿namespace MyPastelitos.Web.Core.Pagination
+﻿using MyPastelitos.Web.Core.Pagination.Abstractions;
+
+namespace MyPastelitos.Web.Core.Pagination
 {
-    public class PaginationResponse<T>
+    public class PaginationResponse<T> : IPagination
     {
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }

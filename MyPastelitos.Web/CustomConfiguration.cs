@@ -2,6 +2,8 @@
 using AspNetCoreHero.ToastNotification.Extensions;
 using Microsoft.EntityFrameworkCore;
 using MyPastelitos.Web.Data;
+using MyPastelitos.Web.Helpers.Abstractions;
+using MyPastelitos.Web.Helpers.Implementations;
 using MyPastelitos.Web.Services.Abstractions;
 using MyPastelitos.Web.Services.Implementations;
 
@@ -39,7 +41,10 @@ namespace MyPastelitos.Web
 
         private static void AddServices(WebApplicationBuilder builder)
         {
-            builder.Services.AddScoped<ISectionsService, SectionsService>();
+            builder.Services.AddScoped<ISectionsService, SectionsService>(); 
+            builder.Services.AddScoped<IRecipesService, RecipesService>();
+
+            builder.Services.AddScoped<ISelectListHelper, SelectListHelper>();
         }
 
         public static WebApplication AddCustomWebApplicationConfiguration(this WebApplication app)

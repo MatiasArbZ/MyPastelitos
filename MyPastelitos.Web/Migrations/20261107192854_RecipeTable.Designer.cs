@@ -12,8 +12,8 @@ using MyPastelitos.Web.Data;
 namespace MyPastelitos.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20261007210558_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20261107192854_RecipeTable")]
+    partial class RecipeTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,31 @@ namespace MyPastelitos.Web.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("MyPastelitos.Web.Data.Entities.Recipe", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("VARCHAR(MAX)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<Guid>("SectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("Recipe");
+                });
 
             modelBuilder.Entity("MyPastelitos.Web.Data.Entities.Section", b =>
                 {
@@ -50,6 +75,17 @@ namespace MyPastelitos.Web.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Sections");
+                });
+
+            modelBuilder.Entity("MyPastelitos.Web.Data.Entities.Recipe", b =>
+                {
+                    b.HasOne("MyPastelitos.Web.Data.Entities.Section", "Section")
+                        .WithMany()
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Section");
                 });
 #pragma warning restore 612, 618
         }

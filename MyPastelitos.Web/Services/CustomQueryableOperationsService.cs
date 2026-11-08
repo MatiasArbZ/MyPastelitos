@@ -68,7 +68,7 @@ namespace MyPastelitos.Web.Services
 
         }
 
-        public async Task<Response<object>> DeleteAsync<TEntity>(Guid id) where TEntity : class, IID
+        public async Task<Response> DeleteAsync<TEntity>(Guid id) where TEntity : class, IID
         {
             try
             {
@@ -76,16 +76,16 @@ namespace MyPastelitos.Web.Services
 
                 if (entity == null)
                 {
-                    return Response<object>.Failure($"No existe Producto con el ID {id}");
+                    return Response.Failure($"No existe Producto con el ID {id}");
                 }
 
                 _context.Remove(entity);
                 await _context.SaveChangesAsync();
-                return Response<object>.Success("Producto eliminado con éxito");
+                return Response.Success("Producto eliminado con éxito");
             }
             catch (Exception ex)
             {
-                return Response<object>.Failure(ex);
+                return Response.Failure(ex);
             }
         }
         public async Task<Response<TDto>> GetOneAsync<TDto, TEntity>(Guid id, IQueryable<TEntity>? query = null) where TEntity : class, IID

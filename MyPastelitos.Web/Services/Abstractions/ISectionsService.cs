@@ -9,7 +9,7 @@ namespace MyPastelitos.Web.Services.Abstractions
     {
         public Task<Response<CreateSectionDTO>> CreateSection(CreateSectionDTO dto);
 
-        public Task<Response<object>> DeleteAsync(Guid id);
+        public Task<Response> DeleteAsync(Guid id);
 
         public Task<Response<SectionDTO>> GetOneAsync(Guid id);
 
@@ -17,9 +17,6 @@ namespace MyPastelitos.Web.Services.Abstractions
 
         public Task<Response<SectionDTO>> UpdateAsync(UpdateSectionDTO dto);
         public Task<Response<object>> ToggleAsync(ToggleSectionStatusDTO dto);
-
-
-        
-
+       
     }
 }
