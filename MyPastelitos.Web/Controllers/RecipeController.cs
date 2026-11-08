@@ -1,4 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyPastelitos.Web.Core;
 using MyPastelitos.Web.Core.Pagination;
@@ -11,6 +12,8 @@ using MyPastelitos.Web.Services.Implementations;
 
 namespace MyPastelitos.Web.Controllers
 {
+
+    [Authorize]
     public class RecipeController : Controller
     {
         private readonly INotyfService _notyfService;

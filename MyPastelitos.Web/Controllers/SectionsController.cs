@@ -4,10 +4,13 @@ using MyPastelitos.Web.Core;
 using MyPastelitos.Web.Core.Pagination;
 using MyPastelitos.Web.DTOs.Section;
 using MyPastelitos.Web.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using MyPastelitos.Web.Services.Implementations;
 
 namespace MyPastelitos.Web.Controllers
 {
+
+    [Authorize]
     public class SectionsController : Controller
     {
         private readonly INotyfService _notyfService;
