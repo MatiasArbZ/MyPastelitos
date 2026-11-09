@@ -10,12 +10,12 @@ namespace MyPastelitos.Web.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IUsersService _usersService;
+        private readonly IAccountService _accountService;
         private readonly INotyfService _notyfService;
 
-        public AccountController(IUsersService usersService, INotyfService notyfService)
+        public AccountController(IAccountService usersService, INotyfService notyfService)
         {
-            _usersService = usersService;
+            _accountService = usersService;
             _notyfService = notyfService;
         }
 
@@ -32,7 +32,7 @@ namespace MyPastelitos.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                Response<MySignInResult> result = await _usersService.LoginAsync(dto);
+                Response<MySignInResult> result = await _accountService.LoginAsync(dto);
                 if (result.IsSuccess)
                 {
                     return RedirectToAction("Index", "Home");
@@ -54,7 +54,7 @@ namespace MyPastelitos.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await _usersService.LogOutAsync();
+            await _accountService.LogOutAsync();
             return RedirectToAction(nameof(login));
         }
     }

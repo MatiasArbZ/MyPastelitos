@@ -54,6 +54,7 @@ namespace MyPastelitos.Web
             builder.Services.AddScoped<ISectionsService, SectionsService>(); 
             builder.Services.AddScoped<IRecipesService, RecipesService>();
             builder.Services.AddScoped<IUsersService, UsersService>();
+            builder.Services.AddScoped<IAccountService, AccountService>();
 
             builder.Services.AddTransient<SeedDb>();
 

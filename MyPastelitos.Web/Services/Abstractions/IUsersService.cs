@@ -9,9 +9,7 @@ namespace MyPastelitos.Web.Services.Abstractions
     {
 
         public Task <Response<IdentityResult>> AddUserAsync(User user, string password);
-        public Task<Response<IdentityResult>> ConfirmUserAsync(User user, string token);
-        public Task<Response<string>> GenerateConfirmationTokenAsync(User user);
-        public Task<Response<SignInResult>> LoginAsync(LoginDTO dto);
-        public Task LogOutAsync();
+        public Task <Response<User>> GetUserByEmailAsync(string email);
+
     }
 }

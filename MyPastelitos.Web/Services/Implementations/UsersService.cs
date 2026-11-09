@@ -3,18 +3,22 @@ using MyPastelitos.Web.Data.Entities;
 using MyPastelitos.Web.Services.Abstractions;
 using MyPastelitos.Web.Core;
 using MyPastelitos.Web.DTOs.Account;
+using MyPastelitos.Web.Data;
+using Microsoft.EntityFrameworkCore;
+using MyPastelitos.Web.DTOs.User;
 
 namespace MyPastelitos.Web.Services.Implementations
 {
     public class UsersService : IUsersService
     {
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly DataContext _context;
 
-        public UsersService(UserManager<User> userManager, SignInManager<User> signInManager)
+        public UsersService(UserManager<User> userManager, DataContext context)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
+            _context = context;
+
         }
 
         public async Task<Response<IdentityResult>> AddUserAsync(User user, string password)
@@ -29,39 +33,66 @@ namespace MyPastelitos.Web.Services.Implementations
 
         }
 
-        public async Task<Response<IdentityResult>> ConfirmUserAsync(User user, string token)
+        public async Task<Response<User>> GetUserByEmailAsync(string email)
         {
-            IdentityResult result = await _userManager.ConfirmEmailAsync(user, token);
-
-            return new Response<IdentityResult>
+            try
             {
-                Result = result,
-                IsSuccess = result.Succeeded
-            };
-        }
+                User? user = await _context.Users.Include(u => u.PrivateRecipeRole)
+                                            .FirstOrDefaultAsync(u => u.Email == email);
 
-        public async Task<Response<string>> GenerateConfirmationTokenAsync(User user)
-        {
-            string result = await _userManager.GeneratePasswordResetTokenAsync(user);
+                if(user is null)
+                {
+                    return Response<User>.Failure($"no existe usuario con Email: '{email}'");
+                }
 
-            return Response<string>.Success(result);
-
-        }
-
-        public async Task<Response<SignInResult>> LoginAsync(LoginDTO dto)
-        {
-            SignInResult result = await _signInManager.PasswordSignInAsync(dto.Email, dto.Password, false, false);
-
-            return new Response<SignInResult>
+                return Response<User>.Success(user);
+            }
+            catch (Exception ex)
             {
-                Result = result,
-                IsSuccess = result.Succeeded
-            };
+                return Response<User>.Failure(ex);
+            }
         }
 
-        public async Task LogOutAsync()
+        public async Task<Response<User>> GetUserByIdAsync(string id)
         {
-           await _signInManager.SignOutAsync();
+            try
+            {
+                User? user = await _context.Users.Include(u => u.PrivateRecipeRole)
+                                                          .FirstOrDefaultAsync(u => u.Id == id);
+                if (user is null)
+                {
+                    return Response<User>.Failure($"no existe usuario con id: '{id}'");
+                }
+
+                return Response<User>.Success(user);
+            }
+            catch (Exception ex)
+            {
+                return Response<User>.Failure(ex);
+            }
+        }
+
+        public async Task<Response<UserDTO>> UpdateUserAsync(UserDTO dto)
+        {
+            Response<User> response = await GetUserByIdAsync(dto.Id.ToString());
+
+            if (!response.IsSuccess)
+            {
+                return Response<UserDTO>.Failure(response.Message, response.Errors);
+            }
+
+            User user = response.Result;
+            user.PhoneNumber = dto.Phone;
+            user.Document = dto.Document;
+            user.FirstName = dto.FirstName;
+            user.LastName = dto.LastName;
+            user.Photo = dto.Photo;
+
+            _context.Users.Update(user);
+
+            await _context.SaveChangesAsync();
+
+            return Response<UserDTO>.Success(dto, "Usuario actualizado con exito");
         }
     }
 }
