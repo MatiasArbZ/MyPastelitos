@@ -11,6 +11,6 @@ namespace MyPastelitos.Web.Services.Abstractions
         public Task<Response<string>> GenerateConfirmationTokenAsync(User user);
         public Task<Response<SignInResult>> LoginAsync(LoginDTO dto);
         public Task LogOutAsync();
-        Task<Response<AccountUserDTO>> UpdateAccountUserAsync(AccountUserDTO dto);
+        public Task<Response<AccountUserDTO>> UpdateAccountUserAsync(AccountUserDTO dto);
     }
 }

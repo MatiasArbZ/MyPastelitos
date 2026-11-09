@@ -87,6 +87,9 @@ namespace MyPastelitos.Web.Services.Implementations
             user.FirstName = dto.FirstName;
             user.LastName = dto.LastName;
             user.Photo = dto.Photo;
+            user.PrivateRecipeRoleId = dto.PrivateRecipeRoleId == Guid.Empty ? user.PrivateRecipeRoleId : dto.PrivateRecipeRoleId;
+
+            
 
             _context.Users.Update(user);
 

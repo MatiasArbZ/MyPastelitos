@@ -1,9 +1,12 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyPastelitos.Web.Core;
+using MyPastelitos.Web.Data.Entities;
 using MyPastelitos.Web.DTOs.Account;
 using MyPastelitos.Web.Services.Abstractions;
+using MyPastelitos.Web.Services.Implementations;
 using MySignInResult = Microsoft.AspNetCore.Identity.SignInResult;
 
 namespace MyPastelitos.Web.Controllers
@@ -12,11 +15,15 @@ namespace MyPastelitos.Web.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly INotyfService _notyfService;
+        private readonly IUsersService _usersService;
+        private readonly IMapper _mapper;
 
-        public AccountController(IAccountService usersService, INotyfService notyfService)
+        public AccountController(IAccountService accountService, INotyfService notyfService, IUsersService usersService, IMapper mapper)
         {
-            _accountService = usersService;
+            _accountService = accountService;
             _notyfService = notyfService;
+            _usersService = usersService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -57,5 +64,36 @@ namespace MyPastelitos.Web.Controllers
             await _accountService.LogOutAsync();
             return RedirectToAction(nameof(login));
         }
-    }
-}
+
+
+        [HttpGet]
+        [Authorize]
+
+        public async Task<IActionResult> UpdateUser(AccountUserDTO dto)
+        {
+            User? user = null;
+
+            string email = User?.Identity?.Name;
+
+            if (string.IsNullOrEmpty(email))
+            {
+            }
+            Response<AccountUserDTO> result = await _accountService.UpdateAccountUserAsync(dto);
+
+            if (result.IsSuccess)
+            {
+                _notyfService.Success(result.Message);
+            }
+            else
+            {
+                _notyfService.Error(result.Message);
+            }
+
+                _notyfService.Error("El email es requerido");
+                return RedirectToAction("Home", "Index");
+            }
+          
+            }
+        }
+    
+

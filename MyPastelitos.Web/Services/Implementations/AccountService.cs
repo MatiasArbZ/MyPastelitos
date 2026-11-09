@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using MyPastelitos.Web.Core;
 using MyPastelitos.Web.Data.Entities;
 using MyPastelitos.Web.DTOs.Account;
+using MyPastelitos.Web.DTOs.User;
 using MyPastelitos.Web.Services.Abstractions;
 
 namespace MyPastelitos.Web.Services.Implementations
@@ -10,11 +12,15 @@ namespace MyPastelitos.Web.Services.Implementations
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IUsersService _usersService;
 
-        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager)
+
+
+        public AccountService(UserManager<User> userManager, SignInManager<User> signInManager, IUsersService usersService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _usersService = usersService;
         }
         public async Task<Response<IdentityResult>> ConfirmUserAsync(User user, string token)
         {
@@ -27,6 +33,12 @@ namespace MyPastelitos.Web.Services.Implementations
             };
         }
 
+        public override bool Equals(object? obj)
+        {
+            return obj is AccountService service &&
+                   EqualityComparer<IUsersService>.Default.Equals(_usersService, service._usersService);
+        }
+
         public async Task<Response<string>> GenerateConfirmationTokenAsync(User user)
         {
             string result = await _userManager.GeneratePasswordResetTokenAsync(user);
@@ -35,20 +47,54 @@ namespace MyPastelitos.Web.Services.Implementations
 
         }
 
-        public async Task<Response<SignInResult>> LoginAsync(LoginDTO dto)
+        public override int GetHashCode()
         {
-            SignInResult result = await _signInManager.PasswordSignInAsync(dto.Email, dto.Password, false, false);
+            return HashCode.Combine(_usersService);
+        }
 
-            return new Response<SignInResult>
-            {
-                Result = result,
-                IsSuccess = result.Succeeded
-            };
+        public Task<Response<SignInResult>> LoginAsync(LoginDTO dto)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task LogOutAsync()
         {
             await _signInManager.SignOutAsync();
         }
+
+        public async Task<Response<AccountUserDTO>> UpdateAccountUserAsync(AccountUserDTO dto)
+        {
+            try
+            {
+
+                //TODO: validar usuario
+                UserDTO userDto = new UserDTO
+                {
+                    Id = dto.Id,
+                    FirstName = dto.FirstName,
+                    LastName = dto.LastName,
+                    Phone = dto.Phone,
+                    Photo = dto.Photo,
+                    Document = dto.Document,
+                };
+
+                Response<UserDTO> userDtoResponse = await _usersService.UpdateUserAsync(userDto);
+
+                if (userDtoResponse.IsSuccess)
+                {
+                    return Response<AccountUserDTO>.Success(dto);
+                }
+
+                return Response<AccountUserDTO>.Failure(userDtoResponse.Message, userDtoResponse.Errors);
+
+            }
+            catch (Exception ex)
+            {
+                return Response<AccountUserDTO>.Failure(ex);
+            }
+        }
+            
+        
     }
 }
+
