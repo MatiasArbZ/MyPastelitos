@@ -1,4 +1,4 @@
-﻿﻿@model AccountUserDTO
+﻿@model AccountUserDTO
 
 
 <div class="pagetitle">
@@ -6,7 +6,7 @@
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Inicio</a></li>
-            <li class="breadcrumb-item active">Editar Mi Usuario</li>
+            <li class="breadcrumb-item active">Editar mi Usuario</li>
         </ol>
     </nav>
 </div>
@@ -19,7 +19,7 @@
             <h5 class="card-title text-primary">Editar mi Usuario</h5>
 
             <form asp-action="UpdateUser" method="POST" class="row g-3" enctype='multipart/form-data'>
-                
+                <input type="hidden" asp-for="Id" />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Email" />
 

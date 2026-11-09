@@ -69,7 +69,7 @@ namespace MyPastelitos.Web.Controllers
         [HttpGet]
         [Authorize]
 
-        public async Task<IActionResult> UpdateUser(AccountUserDTO dto)
+        public async Task<IActionResult> UpdateUser()
         {
             User? user = null;
 
@@ -77,9 +77,30 @@ namespace MyPastelitos.Web.Controllers
 
             if (string.IsNullOrEmpty(email))
             {
+                _notyfService.Error("El email es requerido");
+                return RedirectToAction("Index", "Home");
             }
-            Response<AccountUserDTO> result = await _accountService.UpdateAccountUserAsync(dto);
 
+            Response<User> userResponse = await _usersService.GetUserByEmailAsync(email);
+
+            if (!userResponse.IsSuccess)
+            {
+                _notyfService.Error(userResponse.Message);
+                return RedirectToAction("Index", "Home");
+            }
+
+            user = userResponse.Result;
+
+            AccountUserDTO dto = _mapper.Map<AccountUserDTO>(user);
+
+
+            return View(dto);
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> UpdateUser(AccountUserDTO dto)
+        {
+           Response<AccountUserDTO> result= await _accountService.UpdateAccountUserAsync(dto);
             if (result.IsSuccess)
             {
                 _notyfService.Success(result.Message);
@@ -88,12 +109,13 @@ namespace MyPastelitos.Web.Controllers
             {
                 _notyfService.Error(result.Message);
             }
+            return RedirectToAction("Index", "Home");
 
-                _notyfService.Error("El email es requerido");
-                return RedirectToAction("Home", "Index");
-            }
-          
-            }
+
+        }
+
+
+    }
         }
     
 

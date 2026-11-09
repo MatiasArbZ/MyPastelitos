@@ -52,9 +52,15 @@ namespace MyPastelitos.Web.Services.Implementations
             return HashCode.Combine(_usersService);
         }
 
-        public Task<Response<SignInResult>> LoginAsync(LoginDTO dto)
+        public async Task<Response<SignInResult>> LoginAsync(LoginDTO dto)
         {
-            throw new NotImplementedException();
+            SignInResult result = await _signInManager.PasswordSignInAsync(dto.Email, dto.Password, false, false);
+
+            return new Response<SignInResult>
+            {
+                Result = result,
+                IsSuccess = result.Succeeded
+            };
         }
 
         public async Task LogOutAsync()

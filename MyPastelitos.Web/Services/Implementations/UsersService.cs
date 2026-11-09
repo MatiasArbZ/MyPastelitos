@@ -74,6 +74,8 @@ namespace MyPastelitos.Web.Services.Implementations
 
         public async Task<Response<UserDTO>> UpdateUserAsync(UserDTO dto)
         {
+            try { 
+
             Response<User> response = await GetUserByIdAsync(dto.Id.ToString());
 
             if (!response.IsSuccess)
@@ -96,6 +98,11 @@ namespace MyPastelitos.Web.Services.Implementations
             await _context.SaveChangesAsync();
 
             return Response<UserDTO>.Success(dto, "Usuario actualizado con exito");
+
+            }catch (Exception ex)
+            {
+                return Response<UserDTO>.Failure(ex);
+            }
         }
     }
 }
