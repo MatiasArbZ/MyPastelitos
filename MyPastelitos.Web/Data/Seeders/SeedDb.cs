@@ -10,16 +10,18 @@ namespace MyPastelitos.Web.Data.Seeders
 
 
 
+
         public SeedDb(DataContext context, IUsersService userService, IAccountService accountService)
         {
             _context = context;
             _userService = userService;
             _accountService = accountService;
         }
-
+        
         public async Task SeedAsync()
         {
             await new SectionsSeeder(_context).SeedAsyc();
+            await new PermissionsSeeder(_context).SeedAsync();
             await new AccountSeeder(_userService, _context, _accountService).SeedAsync();
         }
 

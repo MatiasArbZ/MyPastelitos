@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyPastelitos.Web.Core;
+using MyPastelitos.Web.Core.Attributes;
 using MyPastelitos.Web.Core.Pagination;
 using MyPastelitos.Web.Data.Entities;
 using MyPastelitos.Web.DTOs.Recipe;
@@ -30,6 +31,7 @@ namespace MyPastelitos.Web.Controllers
         }
 
         [HttpGet]
+        [CustomAuthorize(permissionCode: "recipe.show")]
         public async Task<IActionResult> Index([FromQuery] PaginationRequest request)
         {
 
@@ -45,6 +47,7 @@ namespace MyPastelitos.Web.Controllers
         }
 
         [HttpGet]
+        [CustomAuthorize(permissionCode: "recipe.create")]
         public async Task<IActionResult> Create()
         {
             CreateRecipeDTO dto = new CreateRecipeDTO
@@ -55,6 +58,7 @@ namespace MyPastelitos.Web.Controllers
         }
 
         [HttpPost]
+        [CustomAuthorize(permissionCode: "recipe.create")]
         public async Task<IActionResult> Create([FromForm] CreateRecipeDTO dto)
         {
             if (!ModelState.IsValid)
@@ -78,6 +82,7 @@ namespace MyPastelitos.Web.Controllers
         }
 
         [HttpGet]
+        [CustomAuthorize(permissionCode: "recipe.update")]
         public async Task<IActionResult> Edit([FromRoute] Guid id)
         {
             Response<RecipeDTO> response = await _recipesService.GetOneAsync(id);
@@ -101,6 +106,7 @@ namespace MyPastelitos.Web.Controllers
         }
 
         [HttpPost]
+        [CustomAuthorize(permissionCode: "recipe.update")]
         public async Task<IActionResult> Edit([FromForm] UpdateRecipeDTO dto)
         {
             if (!ModelState.IsValid)
@@ -125,6 +131,7 @@ namespace MyPastelitos.Web.Controllers
         }
 
         [HttpPost]
+        [CustomAuthorize(permissionCode: "recipe.delete")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             Response response = await _recipesService.DeleteAsync(id);

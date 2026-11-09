@@ -155,6 +155,35 @@ namespace MyPastelitos.Web.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("MyPastelitos.Web.Data.Entities.Permission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(32)
+                        .HasColumnType("nvarchar(32)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Module")
+                        .IsRequired()
+                        .HasMaxLength(62)
+                        .HasColumnType("nvarchar(62)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Permissions");
+                });
+
             modelBuilder.Entity("MyPastelitos.Web.Data.Entities.PrivateRecipeRole", b =>
                 {
                     b.Property<Guid>("Id")
@@ -167,6 +196,9 @@ namespace MyPastelitos.Web.Migrations
                         .HasColumnType("nvarchar(32)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("PrivateRecipeRoles");
                 });
@@ -196,6 +228,21 @@ namespace MyPastelitos.Web.Migrations
                     b.ToTable("Recipe");
                 });
 
+            modelBuilder.Entity("MyPastelitos.Web.Data.Entities.RolePermission", b =>
+                {
+                    b.Property<Guid>("PrivateRecipeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("PermisssionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PrivateRecipeId", "PermisssionId");
+
+                    b.HasIndex("PermisssionId");
+
+                    b.ToTable("RolePermissions");
+                });
+
             modelBuilder.Entity("MyPastelitos.Web.Data.Entities.Section", b =>
                 {
                     b.Property<Guid>("Id")
@@ -219,6 +266,9 @@ namespace MyPastelitos.Web.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
 
                     b.ToTable("Sections");
                 });
@@ -298,6 +348,9 @@ namespace MyPastelitos.Web.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Document")
+                        .IsUnique();
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -373,6 +426,25 @@ namespace MyPastelitos.Web.Migrations
                     b.Navigation("Section");
                 });
 
+            modelBuilder.Entity("MyPastelitos.Web.Data.Entities.RolePermission", b =>
+                {
+                    b.HasOne("MyPastelitos.Web.Data.Entities.Permission", "Permission")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("PermisssionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyPastelitos.Web.Data.Entities.PrivateRecipeRole", "PrivateRecipeRole")
+                        .WithMany("RolePermissions")
+                        .HasForeignKey("PrivateRecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Permission");
+
+                    b.Navigation("PrivateRecipeRole");
+                });
+
             modelBuilder.Entity("MyPastelitos.Web.Data.Entities.User", b =>
                 {
                     b.HasOne("MyPastelitos.Web.Data.Entities.PrivateRecipeRole", "PrivateRecipeRole")
@@ -382,6 +454,16 @@ namespace MyPastelitos.Web.Migrations
                         .IsRequired();
 
                     b.Navigation("PrivateRecipeRole");
+                });
+
+            modelBuilder.Entity("MyPastelitos.Web.Data.Entities.Permission", b =>
+                {
+                    b.Navigation("RolePermissions");
+                });
+
+            modelBuilder.Entity("MyPastelitos.Web.Data.Entities.PrivateRecipeRole", b =>
+                {
+                    b.Navigation("RolePermissions");
                 });
 #pragma warning restore 612, 618
         }

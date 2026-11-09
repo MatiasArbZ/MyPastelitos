@@ -27,6 +27,8 @@ namespace MyPastelitos.Web
             // AutoMapper
             builder.Services.AddAutoMapper(typeof(Program));
 
+
+            builder.Services.AddHttpContextAccessor();
             // Services
 
             // Toast Notifications
@@ -40,6 +42,8 @@ namespace MyPastelitos.Web
             // IAM
 
             AddIAM(builder);
+
+           
 
             AddServices(builder);
 

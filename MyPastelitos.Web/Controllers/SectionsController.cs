@@ -6,6 +6,8 @@ using MyPastelitos.Web.DTOs.Section;
 using MyPastelitos.Web.Services.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using MyPastelitos.Web.Services.Implementations;
+using MyPastelitos.Web.Data.Entities;
+using MyPastelitos.Web.Core.Attributes;
 
 namespace MyPastelitos.Web.Controllers
 {
@@ -23,6 +25,9 @@ namespace MyPastelitos.Web.Controllers
         }
 
         [HttpGet]
+
+        [CustomAuthorize(permissionCode: "sections.show")]
+
         public async Task<IActionResult> Index([FromQuery] PaginationRequest request)
         {
 
@@ -38,12 +43,15 @@ namespace MyPastelitos.Web.Controllers
         }
 
         [HttpGet]
+        [CustomAuthorize(permissionCode: "sections.create")]
         public IActionResult Create()
         {
             return View();
         }
 
+
         [HttpPost]
+        [CustomAuthorize(permissionCode: "sections.create")]
         public async Task<IActionResult> Create([FromForm] CreateSectionDTO dto)
         {
             if (!ModelState.IsValid)
@@ -66,6 +74,7 @@ namespace MyPastelitos.Web.Controllers
 
 
         [HttpGet]
+        [CustomAuthorize(permissionCode: "sections.update")]
         public async Task<IActionResult> Edit([FromRoute] Guid id)
         {   
             Response<SectionDTO> response = await _sectionsService.GetOneAsync(id);
@@ -89,6 +98,7 @@ namespace MyPastelitos.Web.Controllers
         }
 
         [HttpPost]
+        [CustomAuthorize(permissionCode: "sections.update")]
         public async Task<IActionResult> Edit([FromForm] UpdateSectionDTO dto)
         {
             if (!ModelState.IsValid)
@@ -112,6 +122,7 @@ namespace MyPastelitos.Web.Controllers
 
 
         [HttpPost]
+        [CustomAuthorize(permissionCode: "sections.delete")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             Response response = await _sectionsService.DeleteAsync(id);
@@ -131,6 +142,7 @@ namespace MyPastelitos.Web.Controllers
 
 
         [HttpPost]
+        [CustomAuthorize(permissionCode: "sections.update")]
         public async Task<IActionResult> Toggle(ToggleSectionStatusDTO dto)
         {
             Response<object> response = await _sectionsService.ToggleAsync(dto);
