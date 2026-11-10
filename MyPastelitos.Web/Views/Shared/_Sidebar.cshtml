@@ -42,6 +42,17 @@
             </li>
 
         }
+
+         @if (await _accountService.AccountUserIsAuthorizedAsync("roles.show"))
+        {
+            <li class="nav-item">
+                <a class="nav-link collapsed" asp-controller="Roles" asp-action="Index">
+                    <i class="bi bi-shop"></i>
+                    <span>Roles</span>
+                </a>
+            </li>
+
+        }
         
     </ul>
 

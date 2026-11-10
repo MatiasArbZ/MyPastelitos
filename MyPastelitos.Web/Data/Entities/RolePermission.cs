@@ -2,8 +2,8 @@
 {
     public class RolePermission
     {
-        public required Guid PrivateRecipeId { get; set; }
-        public required Guid PermisssionId { get; set; }
+        public required Guid PrivateRecipeRoleId { get; set; }
+        public required Guid PermissionId { get; set; }
 
         public PrivateRecipeRole? PrivateRecipeRole { get; set; }
 

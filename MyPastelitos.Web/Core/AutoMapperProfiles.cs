@@ -2,6 +2,7 @@
 using MyPastelitos.Web.Data.Entities;
 using MyPastelitos.Web.DTOs.Account;
 using MyPastelitos.Web.DTOs.Recipe;
+using MyPastelitos.Web.DTOs.Role;
 using MyPastelitos.Web.DTOs.Section;
 using MyPastelitos.Web.DTOs.User;
 
@@ -43,6 +44,9 @@ namespace MyPastelitos.Web.Core
                                              .ForMember(dto => dto.Id, entity => entity.MapFrom(e => Guid.Parse(e.Id)))
                                              .ReverseMap();
 
+            CreateMap<PrivateRecipeRole, RoleDTO>().ReverseMap();
+
+            CreateMap<Permission, PermissionDTO>().ReverseMap();
 
         }
 

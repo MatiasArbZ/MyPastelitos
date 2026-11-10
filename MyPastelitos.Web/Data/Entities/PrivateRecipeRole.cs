@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MyPastelitos.Web.Data.Abstractions;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyPastelitos.Web.Data.Entities
 {
-    public class PrivateRecipeRole
+    public class PrivateRecipeRole : IID
     {
         [Key]
         public Guid Id { get; set; }

@@ -24,7 +24,7 @@
             };
         }
 
-        public static Response Failure(string message, List<string> errors = null)
+        public static Response Failure(string message, List<string>? errors = null)
         {
             return new Response
             {
@@ -66,7 +66,7 @@
             };
         }
 
-        public static Response<TResult> Failure(string message= "Ha ocurrido un error", List<string> errors= null)
+        public static Response<TResult> Failure(string message= "Ha ocurrido un error", List<string>? errors = null)
         {
             return new Response<TResult>
             {

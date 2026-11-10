@@ -99,16 +99,16 @@ namespace MyPastelitos.Web.Data.Seeders
             foreach (Permission permission in permissions)
             {
                 bool permissionExists = await _context.RolePermissions
-                    .AnyAsync(rp => rp.PrivateRecipeId == role.Id &&
-                                   rp.PermisssionId == permission.Id);
+                    .AnyAsync(rp => rp.PrivateRecipeRoleId == role.Id &&
+                     rp.PermissionId == permission.Id);
 
                 if (!permissionExists)
                 {
                     await _context.RolePermissions.AddAsync(
                         new RolePermission
                         {
-                            PermisssionId = permission.Id,
-                            PrivateRecipeId = role.Id
+                            PermissionId = permission.Id,
+                            PrivateRecipeRoleId = role.Id
                         });
                 }
             }

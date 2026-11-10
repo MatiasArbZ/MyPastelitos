@@ -29,19 +29,19 @@ namespace MyPastelitos.Web.Data
         }
         private void ConfigureKeys(ModelBuilder builder)
         {
-                        // Role permission
+            // Role permission
             builder.Entity<RolePermission>()
-                .HasKey(rp => new { rp.PrivateRecipeId, rp.PermisssionId });
-            
+                .HasKey(rp => new { rp.PrivateRecipeRoleId, rp.PermissionId });
+
             builder.Entity<RolePermission>()
                 .HasOne(rp => rp.Permission)
                 .WithMany(p => p.RolePermissions)
-                .HasForeignKey(rp => rp.PermisssionId);
+                .HasForeignKey(rp => rp.PermissionId);
 
             builder.Entity<RolePermission>()
                 .HasOne(rp => rp.PrivateRecipeRole)
                 .WithMany(r => r.RolePermissions)
-                .HasForeignKey(rp => rp.PrivateRecipeId);
+                .HasForeignKey(rp => rp.PrivateRecipeRoleId);
         }
         private void ConfigureIdexes(ModelBuilder builder)
         {

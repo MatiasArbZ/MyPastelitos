@@ -68,7 +68,7 @@ namespace MyPastelitos.Web.Services.Implementations
 
             return await _Context.Permissions.Include(p => p.RolePermissions)
                                               .AnyAsync(p => p.Code == code &&
-                                                     p.RolePermissions.Any(rp => rp.PrivateRecipeId == user.PrivateRecipeRoleId));
+                                                     p.RolePermissions.Any(rp => rp.PrivateRecipeRoleId == user.PrivateRecipeRoleId));
             
         }
 
