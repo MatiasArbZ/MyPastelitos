@@ -47,6 +47,10 @@ namespace MyPastelitos.Web.Services.Implementations
             {
                 User user = _mapper.Map<User>(dto);
 
+                // Asignar el correo como nombre de usuario
+                user.UserName = dto.Email;
+                user.Email = dto.Email;
+
                 user.Id = Guid.NewGuid().ToString();
 
                 Response<IdentityResult> response = await AddUserAsync(user, dto.Document);

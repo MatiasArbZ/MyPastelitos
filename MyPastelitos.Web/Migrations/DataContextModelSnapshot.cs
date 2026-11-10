@@ -230,17 +230,32 @@ namespace MyPastelitos.Web.Migrations
 
             modelBuilder.Entity("MyPastelitos.Web.Data.Entities.RolePermission", b =>
                 {
-                    b.Property<Guid>("PrivateRecipeId")
+                    b.Property<Guid>("PrivateRecipeRoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PermisssionId")
+                    b.Property<Guid>("PermissionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("PrivateRecipeId", "PermisssionId");
+                    b.HasKey("PrivateRecipeRoleId", "PermissionId");
 
-                    b.HasIndex("PermisssionId");
+                    b.HasIndex("PermissionId");
 
                     b.ToTable("RolePermissions");
+                });
+
+            modelBuilder.Entity("MyPastelitos.Web.Data.Entities.RoleSection", b =>
+                {
+                    b.Property<Guid>("PrivateRecipeRoleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("SectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PrivateRecipeRoleId", "SectionId");
+
+                    b.HasIndex("SectionId");
+
+                    b.ToTable("RoleSections");
                 });
 
             modelBuilder.Entity("MyPastelitos.Web.Data.Entities.Section", b =>
@@ -430,19 +445,38 @@ namespace MyPastelitos.Web.Migrations
                 {
                     b.HasOne("MyPastelitos.Web.Data.Entities.Permission", "Permission")
                         .WithMany("RolePermissions")
-                        .HasForeignKey("PermisssionId")
+                        .HasForeignKey("PermissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MyPastelitos.Web.Data.Entities.PrivateRecipeRole", "PrivateRecipeRole")
                         .WithMany("RolePermissions")
-                        .HasForeignKey("PrivateRecipeId")
+                        .HasForeignKey("PrivateRecipeRoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Permission");
 
                     b.Navigation("PrivateRecipeRole");
+                });
+
+            modelBuilder.Entity("MyPastelitos.Web.Data.Entities.RoleSection", b =>
+                {
+                    b.HasOne("MyPastelitos.Web.Data.Entities.PrivateRecipeRole", "PrivateRecipeRole")
+                        .WithMany("RoleSection")
+                        .HasForeignKey("PrivateRecipeRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyPastelitos.Web.Data.Entities.Section", "Section")
+                        .WithMany("RoleSection")
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PrivateRecipeRole");
+
+                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("MyPastelitos.Web.Data.Entities.User", b =>
@@ -464,6 +498,13 @@ namespace MyPastelitos.Web.Migrations
             modelBuilder.Entity("MyPastelitos.Web.Data.Entities.PrivateRecipeRole", b =>
                 {
                     b.Navigation("RolePermissions");
+
+                    b.Navigation("RoleSection");
+                });
+
+            modelBuilder.Entity("MyPastelitos.Web.Data.Entities.Section", b =>
+                {
+                    b.Navigation("RoleSection");
                 });
 #pragma warning restore 612, 618
         }

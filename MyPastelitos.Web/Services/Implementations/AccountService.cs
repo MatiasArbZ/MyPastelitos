@@ -33,7 +33,7 @@ namespace MyPastelitos.Web.Services.Implementations
             _httpContextAccessor = httpContextAccessor;
             _Context = context;
         }
-
+        
         public bool AccountUserIsAuthenticated()
         {
             ClaimsPrincipal? user = _httpContextAccessor.HttpContext?.User;
@@ -168,7 +168,7 @@ namespace MyPastelitos.Web.Services.Implementations
                 }
                 User accountUser = response.Result;
 
-                if (accountUser.Id != dto.Id.ToString()) ;
+                if (accountUser.Id != dto.Id.ToString()) 
 
                 {
                     return Response<AccountUserDTO>.Failure();

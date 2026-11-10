@@ -42,11 +42,12 @@
         </form>
             
         </div>
-        
-        
+
+   
     </div>
         
-        @await Html.PartialAsync("_Permissions", Model);
+        @await Html.PartialAsync("_Sections", Model)
+        @await Html.PartialAsync("_Permissions", Model)
 
         <div class="text-center mt-3">
             <button type="submit" class="btn btn-primary" form="frmCreateRole" id="btnCreateRole">Guardar</button>
@@ -73,7 +74,17 @@
                     permissionIds.push(permissionId);
                 });
 
+                const Sections = $('.section:checked');
+                let sectionIds = [];
+
+                Sections.each(function () {
+                    const sectionId = $(this).data('section-id');
+                    sectionIds.push(sectionId);
+                });
+
+
                 $('#permissionIds').val(JSON.stringify(permissionIds));
+                $('#sectionIds').val(JSON.stringify(sectionIds));
             });
 
         });

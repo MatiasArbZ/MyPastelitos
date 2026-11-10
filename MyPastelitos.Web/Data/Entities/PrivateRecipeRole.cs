@@ -14,5 +14,7 @@ namespace MyPastelitos.Web.Data.Entities
 
         public IEnumerable<RolePermission>? RolePermissions { get; set; }
 
+        public IEnumerable<RoleSection>? RoleSection { get; set; }
+
     }
 }

@@ -22,7 +22,9 @@ namespace MyPastelitos.Web.Data.Entities
             [Precision(18, 2)]
             public decimal Price { get; set; }
 
-            public bool IsHidden {  get; set; }
+        public bool IsHidden { get; set; } = false;
+
+        public IEnumerable<RoleSection>? RoleSection { get; set; }
 
         public static implicit operator Section(List<SelectListItem>v)
         {
