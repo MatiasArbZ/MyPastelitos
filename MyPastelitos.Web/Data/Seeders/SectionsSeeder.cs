@@ -16,10 +16,7 @@ namespace MyPastelitos.Web.Data.Seeders
         {
             List<Section> sections = new List<Section>
             {
-                new Section { Id = Guid.NewGuid(), Name = "General", Description = "Informacion base de la compañía" },
-                new Section { Id = Guid.NewGuid(), Name = "Informatica"},
-                new Section { Id = Guid.NewGuid(), Name = "Pentesting"},
-                new Section { Id = Guid.NewGuid(), Name = "Clases", IsHidden = true},
+               
             };
 
             foreach(Section section in sections)
