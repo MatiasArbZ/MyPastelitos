@@ -49,7 +49,7 @@ namespace MyPastelitos.Web.Services.Implementations
             User user = userResponse.Result;
 
             bool isAutorized = true;
-            if (await _accountService.AccountUserIsSuperAdminAsync())
+            if (!await _accountService.AccountUserIsSuperAdminAsync())
             {
                 isAutorized = recipe.Section.RoleSection.Any(rs => rs.PrivateRecipeRoleId == user.PrivateRecipeRoleId);
 
@@ -86,7 +86,7 @@ namespace MyPastelitos.Web.Services.Implementations
                 User user = userResponse.Result;
 
                 bool isAutorized = true;
-                if (await _accountService.AccountUserIsSuperAdminAsync())
+                if (!await _accountService.AccountUserIsSuperAdminAsync())
                 {
                     isAutorized = section.RoleSection.Any(rs => rs.PrivateRecipeRoleId == user.PrivateRecipeRoleId);
 
