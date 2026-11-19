@@ -16,7 +16,11 @@ namespace MyPastelitos.Web.Data.Seeders
         {
             List<Section> sections = new List<Section>
             {
+<<<<<<< Updated upstream
                
+=======
+                
+>>>>>>> Stashed changes
             };
 
             foreach(Section section in sections)

@@ -4,14 +4,14 @@
 
 
 @{
-    ViewData["Title"] = "Nueva seccion";
+    ViewData["Title"] = "Nuevo Producto";
 }
 <div class="pagetitle">
     <h1>@ViewData["Title"]</h1>
     <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Inicio</a></li>
-            <li class="breadcrumb-item"><a asp-action="Index">Secciones</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index">Productos</a></li>
             <li class="breadcrumb-item active">@ViewData["Title"]</li>
         </ol>
     </nav>
@@ -33,7 +33,7 @@
 
         <div class="card-body">
 
-        <<form asp-action="Create" method="POST" class="row g-3">
+        <form asp-action="Create" method="POST" class="row g-3">
 
                 <div class ="col-md-12">
                     <div class="form-floating">     

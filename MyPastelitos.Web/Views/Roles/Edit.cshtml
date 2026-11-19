@@ -46,7 +46,7 @@
         
     </div>
         @await Html.PartialAsync("_Sections", Model)
-        @await Html.PartialAsync("_Permissions", Model);
+        @await Html.PartialAsync("_Permissions", Model)
 
         <div class="text-center mt-3">
             <button type="submit" class="btn btn-primary" form="frmEditRole" id="btnEditRole">Guardar</button>
@@ -56,7 +56,7 @@
 
 
 @section Scripts {
-    @{
+@{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 
