@@ -1,11 +1,12 @@
 ﻿@model AccountUserDTO
 
-
 <div class="pagetitle">
     <h1>Dashboard</h1>
     <nav>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a asp-controller="Home" asp-action="Index">Inicio</a></li>
+            <li class="breadcrumb-item">
+                <a asp-controller="Home" asp-action="Index">Inicio</a>
+            </li>
             <li class="breadcrumb-item active">Editar mi Usuario</li>
         </ol>
     </nav>
@@ -18,11 +19,11 @@
         <div class="card-body">
             <h5 class="card-title text-primary">Editar mi Usuario</h5>
 
-            <form asp-action="UpdateUser" method="POST" class="row g-3" enctype='multipart/form-data'>
+            <form asp-action="UpdateUser" method="POST" class="row g-3" enctype="multipart/form-data">
+
                 <input type="hidden" asp-for="Id" />
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Email" />
-
 
                 <div class="row">
 
@@ -32,7 +33,6 @@
                             <label asp-for="Email"></label>
                         </div>
                     </div>
-
 
                     <div class="col-md-6 mt-2">
                         <div class="form-floating">
@@ -70,8 +70,16 @@
 
                 <div class="text-center mt-3">
                     <button type="submit" class="btn btn-primary">Guardar</button>
+
+                    <a asp-controller="Account"
+                       asp-action="ChangePassword"
+                       class="btn btn-warning">
+                        Cambiar contraseña
+                    </a>
+
                     <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Volver</a>
                 </div>
+
             </form>
 
         </div>
@@ -81,7 +89,4 @@
 </section>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
 }

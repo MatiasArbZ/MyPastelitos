@@ -18,6 +18,7 @@ namespace MyPastelitos.Web.Services.Abstractions
         public Task<bool> AccountUserIsAuthorizedAsync(string code);
 
         public Task<bool> AccountUserIsSuperAdminAsync();
+        public Task<Response> ChangePasswordAsync(ChangePasswordDTO dto);
 
     }
 }
