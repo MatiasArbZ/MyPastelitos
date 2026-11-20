@@ -17,6 +17,6 @@ namespace MyPastelitos.Web.Services.Abstractions
 
         public Task<Response<SectionDTO>> UpdateAsync(UpdateSectionDTO dto);
         public Task<Response<object>> ToggleAsync(ToggleSectionStatusDTO dto);
-       
+        Task<Response<PaginationResponse<SectionDTO>>> CreateAsync(CreateSectionDTO dto);
     }
 }

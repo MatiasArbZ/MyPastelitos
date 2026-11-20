@@ -20,6 +20,10 @@ namespace MyPastelitos.Web.Services.Implementations
             _mapper = mapper;
         }
 
+        public Task<Response<PaginationResponse<SectionDTO>>> CreateAsync(CreateSectionDTO dto)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<Response<CreateSectionDTO>> CreateSection(CreateSectionDTO dto)
         {

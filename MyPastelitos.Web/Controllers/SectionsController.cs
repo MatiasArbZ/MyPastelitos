@@ -25,7 +25,6 @@ namespace MyPastelitos.Web.Controllers
         }
 
         [HttpGet]
-
         [CustomAuthorize(permissionCode: "sections.show")]
 
         public async Task<IActionResult> Index([FromQuery] PaginationRequest request)

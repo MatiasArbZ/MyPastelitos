@@ -1,8 +1,10 @@
 ﻿using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using AspNetCoreHero.ToastNotification.Notyf.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MyPastelitos.Web.Controllers;
 using MyPastelitos.Web.Data;
 using MyPastelitos.Web.Data.Entities;
@@ -11,6 +13,7 @@ using MyPastelitos.Web.Helpers.Abstractions;
 using MyPastelitos.Web.Helpers.Implementations;
 using MyPastelitos.Web.Services.Abstractions;
 using MyPastelitos.Web.Services.Implementations;
+using System.Text;
 
 namespace MyPastelitos.Web
 {
@@ -93,6 +96,26 @@ namespace MyPastelitos.Web
                 config.AccessDeniedPath = "/Error/403";
 
             });
+
+            //JWT
+            builder.Services.AddAuthentication()
+                            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+                            {
+                                options.TokenValidationParameters = new TokenValidationParameters
+                                {
+                                    ValidateIssuer = true,
+                                    ValidateAudience = true,
+                                    ValidateLifetime = true,
+                                    ValidateIssuerSigningKey = true,
+
+                                    ValidIssuer = builder.Configuration["JWT: Issuer"],
+                                    ValidAudience = builder.Configuration["JWT: Audience"],
+                                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SignKey"])),
+
+                                    ClockSkew = TimeSpan.Zero
+                                    
+                                };
+                            });
         }
 
         public static WebApplication AddCustomWebApplicationConfiguration(this WebApplication app)
