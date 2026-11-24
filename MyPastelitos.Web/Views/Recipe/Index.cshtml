@@ -29,7 +29,9 @@
                 @if (await _accountService.AccountUserIsAuthorizedAsync("recipe.Create"))
                 {
                     <div class="col-md-1">
-                        <a asp-action="Create" class="btn-primary"><i class="bi bi-plus-circle"></i> </a>
+                        <a asp-action="Create" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i>
+                            </a>
 
                     </div>
                 }
