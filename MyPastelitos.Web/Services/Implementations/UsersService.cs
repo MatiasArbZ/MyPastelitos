@@ -167,7 +167,31 @@ namespace MyPastelitos.Web.Services.Implementations
             }
         }
 
-        
+        public async Task<Response> DeleteAsync(Guid id)
+        {
+            try
+            {
+                Response<User> response = await GetUserByIdAsync(id.ToString());
+
+                if (!response.IsSuccess)
+                {
+                    return Response.Failure(response.Message);
+                }
+
+                IdentityResult result = await _userManager.DeleteAsync(response.Result);
+
+                if (!result.Succeeded)
+                {
+                    return Response.Failure(string.Join(", ", result.Errors.Select(e => e.Description)));
+                }
+
+                return Response.Success("Usuario eliminado con éxito");
+            }
+            catch (Exception ex)
+            {
+                return Response.Failure(ex);
+            }
+        }
 
         public Task<Response<UserDTO>> UpdateAsync(UpdateUserDTO dto)
         {

@@ -95,9 +95,20 @@
                                 <td>@item.Email</td>
                                 <td>
                                     @if (await _accountService.AccountUserIsAuthorizedAsync("users.update"))
-                                    {
-                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning"><i class="bi bi-pencil-fill"></i></a>
-                                    }
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                        }
+
+                                        @if (await _accountService.AccountUserIsAuthorizedAsync("users.delete"))
+                                        {
+                                            <form asp-action="Delete" method="POST" style="display: contents;" asp-route-id="@item.Id">
+                                                <button type="submit" class="btn btn-sm btn-danger btnDelete">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        }
 
                                 </td>
                             </tr>
@@ -111,3 +122,34 @@
     </div>
 
 </section>
+
+@section Scripts {
+    <script>
+        document.addEventListener("click", function (event) {
+
+            const button = event.target.closest(".btnDelete");
+
+            if (!button) {
+                return;
+            }
+
+            event.preventDefault();
+
+            Swal.fire({
+                title: '¿Desea eliminar el usuario?',
+                text: 'Esta acción no se puede deshacer.',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then(function (result) {
+
+                if (result.isConfirmed) {
+                    button.closest("form").submit();
+                }
+
+            });
+
+        });
+    </script>
+}

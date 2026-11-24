@@ -33,37 +33,18 @@ namespace MyPastelitos.Web.Services.Implementations
         //TODO : trANSPONSE GET USERRESPONSABILITY TO IACCOUNTSERVICE
         public async Task<Response<RecipeDTO>> GetRecipeAsync(Guid id)
         {
-            Recipe? recipe = await _context.Recipe.Include(r => r.Section)
-                                                  .ThenInclude(s => s.RoleSection)
-                                                  .FirstOrDefaultAsync(r => r.Id == id);
+            Recipe? recipe = await _context.Recipe
+                                           .FirstOrDefaultAsync(r => r.Id == id);
+
             if (recipe is null)
             {
-                return Response<RecipeDTO>.Failure(new Exception("La receta con id: '{id}' no existe."));
-            }
-
-            ClaimsUser? claimsUser = _httpContextAccessor.HttpContext?.User;
-            ///////////////// TODO: cambiar identitiy
-            string? userName = claimsUser.Identity.Name;
-            Response<User> userResponse = await _usersService.GetUserByEmailAsync(userName);
-
-            User user = userResponse.Result;
-
-            bool isAutorized = true;
-            if (!await _accountService.AccountUserIsSuperAdminAsync())
-            {
-                isAutorized = recipe.Section.RoleSection.Any(rs => rs.PrivateRecipeRoleId == user.PrivateRecipeRoleId);
-
-            }
-
-            if (!isAutorized)
-            {
-                return Response<RecipeDTO>.Failure("No tiene autroizacion para consultar esa receta");
+                return Response<RecipeDTO>.Failure(new Exception($"La receta con id: '{id}' no existe."));
             }
 
             RecipeDTO dto = _mapper.Map<RecipeDTO>(recipe);
             return Response<RecipeDTO>.Success(dto);
-
         }
+
 
         //TODO : trANSPONSE GET USERRESPONSABILITY TO IACCOUNTSERVICE
         public async Task<Response<SectionDTO>> GetSectionAsync(Guid id, PaginationRequest request)
@@ -96,17 +77,10 @@ namespace MyPastelitos.Web.Services.Implementations
                     return Response<SectionDTO>.Failure("No tiene autroizacion para consultar ese producto");
                 }
 
-                IQueryable<Recipe> query = _context.Recipe.Where(r => r.SectionId == section.Id);
-
-                query = query.Select(r => new Recipe
-                {
-                    Id = r.Id,
-                    Name = r.Name,
-                    SectionId = r.SectionId,
-                });
+                     IQueryable<Recipe> query = _context.Recipe.AsQueryable();
 
 
-                if (!string.IsNullOrWhiteSpace(request.Filter))
+        if (!string.IsNullOrWhiteSpace(request.Filter))
                 {
                     query = query.Where(s => s.Name.Contains(request.Filter.ToLower()));
                 }

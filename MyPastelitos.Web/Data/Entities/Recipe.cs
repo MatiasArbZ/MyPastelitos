@@ -17,12 +17,5 @@ namespace MyPastelitos.Web.Data.Entities
         [Column(TypeName = "VARCHAR(MAX)")]
         public string? Description { get; set; } = null!;
 
-        public Guid SectionId { get; set; }
-
-        public Section? Section { get; set; }
-
-
-
-
     }
 }

@@ -5,7 +5,6 @@ using MyPastelitos.Web.Core.Pagination;
 using MyPastelitos.Web.Data;
 using MyPastelitos.Web.Data.Entities;
 using MyPastelitos.Web.DTOs.Recipe;
-using MyPastelitos.Web.DTOs.Section;
 using MyPastelitos.Web.Services.Abstractions;
 
 namespace MyPastelitos.Web.Services.Implementations
@@ -40,18 +39,7 @@ namespace MyPastelitos.Web.Services.Implementations
         public async Task<Response<PaginationResponse<RecipeDTO>>> GetPaginationAsync(PaginationRequest request)
         {
 
-            IQueryable<Recipe> query = _context.Recipe.Include(b => b.Section)
-                                                      .Select(b => new Recipe
-                                                       {
-                                                           Id = b.Id,
-                                                           Name = b.Name,
-                                                           Section = new Section
-                                                           {
-                                                               Id = b.Section.Id,
-                                                               Name = b.Section.Name
-                                                           }
-                                                       })
-                                                      .AsQueryable();
+            IQueryable<Recipe> query = _context.Recipe.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(request.Filter))
             {
@@ -71,9 +59,7 @@ namespace MyPastelitos.Web.Services.Implementations
             {
                 Id = result.Result.Id,
                 Name = result.Result.Name,
-                Description = result.Result.Description,
-                Section = result.Result.Section,
-                SectionId = result.Result.SectionId
+                Description = result.Result.Description
             };
 
             return Response<RecipeDTO>.Success(dtoResponse, result.Message);

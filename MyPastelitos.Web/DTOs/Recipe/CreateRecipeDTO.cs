@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 
 namespace MyPastelitos.Web.DTOs.Recipe
@@ -16,12 +15,5 @@ namespace MyPastelitos.Web.DTOs.Recipe
         [Display(Name = "Descripcion")]
         public string? Description { get; set; }
 
-        [Required(ErrorMessage = "El campo {0} es obligatorio")]
-        [Display (Name = "Seccion")]
-        public Guid SectionId { get; set; }
-
-        public Data.Entities.Section? Section { get; set;}
-
-        public List<SelectListItem>? Sections { get; set; }
     }
 }

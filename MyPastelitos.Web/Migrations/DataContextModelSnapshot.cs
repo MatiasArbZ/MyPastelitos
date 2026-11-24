@@ -218,12 +218,7 @@ namespace MyPastelitos.Web.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<Guid>("SectionId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("SectionId");
 
                     b.ToTable("Recipe");
                 });
@@ -428,17 +423,6 @@ namespace MyPastelitos.Web.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("MyPastelitos.Web.Data.Entities.Recipe", b =>
-                {
-                    b.HasOne("MyPastelitos.Web.Data.Entities.Section", "Section")
-                        .WithMany()
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Section");
                 });
 
             modelBuilder.Entity("MyPastelitos.Web.Data.Entities.RolePermission", b =>

@@ -62,7 +62,7 @@ namespace MyPastelitos.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await _accountService.LogOutAsync();
-            return RedirectToAction(nameof(login));
+            return Redirect("/Account/login"); ;
         }
 
 

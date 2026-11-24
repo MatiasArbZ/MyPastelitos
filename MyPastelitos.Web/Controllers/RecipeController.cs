@@ -6,8 +6,6 @@ using MyPastelitos.Web.Core.Attributes;
 using MyPastelitos.Web.Core.Pagination;
 using MyPastelitos.Web.Data.Entities;
 using MyPastelitos.Web.DTOs.Recipe;
-using MyPastelitos.Web.DTOs.Section;
-using MyPastelitos.Web.Helpers.Abstractions;
 using MyPastelitos.Web.Services.Abstractions;
 using MyPastelitos.Web.Services.Implementations;
 
@@ -19,15 +17,13 @@ namespace MyPastelitos.Web.Controllers
     {
         private readonly INotyfService _notyfService;
         private readonly IRecipesService _recipesService;
-        private readonly ISelectListHelper _selectListHelper;
        
 
 
-        public RecipeController(INotyfService notyfService, IRecipesService recipesService, ISelectListHelper selectListHelper)
+        public RecipeController(INotyfService notyfService, IRecipesService recipesService)
         {
             _notyfService = notyfService;
             _recipesService = recipesService;
-            _selectListHelper = selectListHelper;
         }
 
         [HttpGet]
@@ -48,12 +44,9 @@ namespace MyPastelitos.Web.Controllers
 
         [HttpGet]
         [CustomAuthorize(permissionCode: "recipe.create")]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
-            CreateRecipeDTO dto = new CreateRecipeDTO
-            {
-                Sections = await _selectListHelper.GetSectionsSelectListAsync()
-            };
+            CreateRecipeDTO dto = new CreateRecipeDTO();
             return View(dto);
         }
 
@@ -64,7 +57,6 @@ namespace MyPastelitos.Web.Controllers
             if (!ModelState.IsValid)
             {
                 _notyfService.Error("Debe ajustar los errores de validacion");
-                dto.Section = await _selectListHelper.GetSectionsSelectListAsync();
                 return View(dto);
             }
 
@@ -73,7 +65,6 @@ namespace MyPastelitos.Web.Controllers
             if (!response.IsSuccess)
             {
                 _notyfService.Error(response.Message);
-                dto.Section = await _selectListHelper.GetSectionsSelectListAsync();
                 return View(dto);
             }
 
@@ -97,9 +88,7 @@ namespace MyPastelitos.Web.Controllers
             {
                 Id = response.Result.Id,
                 Name = response.Result.Name,
-                Description = response.Result.Description,
-                SectionId = response.Result.SectionId,
-                Sections = await _selectListHelper.GetSectionsSelectListAsync()
+                Description = response.Result.Description
             };
 
             return View(dto);
@@ -112,7 +101,6 @@ namespace MyPastelitos.Web.Controllers
             if (!ModelState.IsValid)
             {
                 _notyfService.Error("Debe ajustar los errores de validacion");
-                dto.Section = await _selectListHelper.GetSectionsSelectListAsync();
                 return View(dto);
             }
 
@@ -122,7 +110,6 @@ namespace MyPastelitos.Web.Controllers
             if (!response.IsSuccess)
             {
                 _notyfService.Error(response.Message);
-                dto.Section = await _selectListHelper.GetSectionsSelectListAsync();
                 return View(dto);
             }
 

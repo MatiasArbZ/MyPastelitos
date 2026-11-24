@@ -133,5 +133,24 @@ namespace MyPastelitos.Web.Controllers
             _notyfService.Success(response.Message);
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpPost]
+        [CustomAuthorize(permissionCode: "users.delete")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            Response response = await _usersService.DeleteAsync(id);
+
+            if (!response.IsSuccess)
+            {
+                _notyfService.Error(response.Message);
+            }
+            else
+            {
+                _notyfService.Success(response.Message);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
+
 }
