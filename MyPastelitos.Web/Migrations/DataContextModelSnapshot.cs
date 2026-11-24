@@ -238,21 +238,6 @@ namespace MyPastelitos.Web.Migrations
                     b.ToTable("RolePermissions");
                 });
 
-            modelBuilder.Entity("MyPastelitos.Web.Data.Entities.RoleSection", b =>
-                {
-                    b.Property<Guid>("PrivateRecipeRoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("SectionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("PrivateRecipeRoleId", "SectionId");
-
-                    b.HasIndex("SectionId");
-
-                    b.ToTable("RoleSections");
-                });
-
             modelBuilder.Entity("MyPastelitos.Web.Data.Entities.Section", b =>
                 {
                     b.Property<Guid>("Id")
@@ -444,25 +429,6 @@ namespace MyPastelitos.Web.Migrations
                     b.Navigation("PrivateRecipeRole");
                 });
 
-            modelBuilder.Entity("MyPastelitos.Web.Data.Entities.RoleSection", b =>
-                {
-                    b.HasOne("MyPastelitos.Web.Data.Entities.PrivateRecipeRole", "PrivateRecipeRole")
-                        .WithMany("RoleSection")
-                        .HasForeignKey("PrivateRecipeRoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("MyPastelitos.Web.Data.Entities.Section", "Section")
-                        .WithMany("RoleSection")
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PrivateRecipeRole");
-
-                    b.Navigation("Section");
-                });
-
             modelBuilder.Entity("MyPastelitos.Web.Data.Entities.User", b =>
                 {
                     b.HasOne("MyPastelitos.Web.Data.Entities.PrivateRecipeRole", "PrivateRecipeRole")
@@ -482,13 +448,6 @@ namespace MyPastelitos.Web.Migrations
             modelBuilder.Entity("MyPastelitos.Web.Data.Entities.PrivateRecipeRole", b =>
                 {
                     b.Navigation("RolePermissions");
-
-                    b.Navigation("RoleSection");
-                });
-
-            modelBuilder.Entity("MyPastelitos.Web.Data.Entities.Section", b =>
-                {
-                    b.Navigation("RoleSection");
                 });
 #pragma warning restore 612, 618
         }

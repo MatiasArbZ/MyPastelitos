@@ -7,27 +7,19 @@ using MyPastelitos.Web.Data.Entities;
 using MyPastelitos.Web.DTOs.Recipe;
 using MyPastelitos.Web.DTOs.Section;
 using MyPastelitos.Web.Services.Abstractions;
-using ClaimsUser = System.Security.Claims.ClaimsPrincipal;
 
 namespace MyPastelitos.Web.Services.Implementations
 {
     public class HomeService : CustomQueryableOperationsService, IHomeService
     {
         private readonly DataContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IAccountService _accountService;
         private readonly IMapper _mapper;
-        private readonly IUsersService _usersService;
 
-        public HomeService(DataContext context,IHttpContextAccessor httpContextAccessor, IAccountService accountService, IMapper mapper, IUsersService usersService) : base(context, mapper)
+        public HomeService(DataContext context, IMapper mapper) : base(context, mapper)
         {
             _context = context;
-            _httpContextAccessor = httpContextAccessor;
-            _accountService = accountService;
             _mapper = mapper;
-            _usersService = usersService;
         }
-
 
 
         //TODO : trANSPONSE GET USERRESPONSABILITY TO IACCOUNTSERVICE
@@ -51,31 +43,14 @@ namespace MyPastelitos.Web.Services.Implementations
         {
             try
             {
-                Section? section = await _context.Sections.Include(s => s.RoleSection)
-                                                             .Where(s => !s.IsHidden && s.Id == id)
-                                                                .FirstOrDefaultAsync();
+                Section? section = await _context.Sections
+                    .Where(s => !s.IsHidden && s.Id == id)
+                    .FirstOrDefaultAsync();
                 if (section is null)
                 {
                     return Response<SectionDTO>.Failure(new Exception("El producto con id: '{id}' no existe."));
                 }
 
-                ClaimsUser? claimsUser = _httpContextAccessor.HttpContext?.User;
-                ///////////////// TODO: cambiar identitiy
-                string? userName = claimsUser.Identity.Name;
-                Response<User> userResponse = await _usersService.GetUserByEmailAsync(userName);
-
-                User user = userResponse.Result;
-
-                bool isAutorized = true;
-                if (!await _accountService.AccountUserIsSuperAdminAsync())
-                {
-                    isAutorized = section.RoleSection.Any(rs => rs.PrivateRecipeRoleId == user.PrivateRecipeRoleId);
-
-                }
-                if (!isAutorized)
-                {
-                    return Response<SectionDTO>.Failure("No tiene autroizacion para consultar ese producto");
-                }
 
                      IQueryable<Recipe> query = _context.Recipe.AsQueryable();
 
@@ -114,20 +89,8 @@ namespace MyPastelitos.Web.Services.Implementations
         //TODO : trANSPONSE GET USERRESPONSABILITY TO IACCOUNTSERVICE
         public async Task<Response<PaginationResponse<SectionDTO>>> GetSectionsAsync(PaginationRequest request)
         {
-            ClaimsUser? claimsUser = _httpContextAccessor.HttpContext?.User;
-            /////////////////cambiar identitiy
-            string? userName = claimsUser.Identity.Name;
-            Response<User> userResponse = await _usersService.GetUserByEmailAsync(userName);
-
-            User user = userResponse.Result;
-
-            IQueryable<Section> query = _context.Sections.Include(s => s.RoleSection)
-                                                         .Where(s => !s.IsHidden);
-
-            if(!await _accountService.AccountUserIsSuperAdminAsync())
-            {
-                query = query.Where(s => s.RoleSection.Any(rs => rs.PrivateRecipeRoleId == user.PrivateRecipeRoleId));
-            }
+            IQueryable<Section> query = _context.Sections
+                                                .Where(s => !s.IsHidden);
 
             if (!string.IsNullOrWhiteSpace(request.Filter))
             {

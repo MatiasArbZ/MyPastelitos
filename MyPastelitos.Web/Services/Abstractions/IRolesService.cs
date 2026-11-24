@@ -19,7 +19,6 @@ namespace MyPastelitos.Web.Services.Abstractions
         public Task<Response<RoleDTO>> UpdateAsync(RoleDTO dto);
 
         public Task<Response<List<PermissionsForRoleDTO>>> GetPermissionsAsync();
-        public Task<Response<List<SectionsForRoleDTO>>> GetSectionsAsync();
 
         
     }

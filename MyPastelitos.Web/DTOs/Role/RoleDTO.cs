@@ -9,8 +9,5 @@
         public List<PermissionsForRoleDTO>? Permissions { get; set; }
         public string? PermissionsIds { get; set; }
 
-        public List<SectionsForRoleDTO>? Sections { get; set; }
-        public string? SectionsIds   { get; set; }
-
     }
 }

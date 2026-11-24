@@ -49,17 +49,10 @@ namespace MyPastelitos.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            Response<List<SectionsForRoleDTO>> sectionsResponse = await _rolesService.GetSectionsAsync();
-            if (!sectionsResponse.IsSuccess)
-            {
-                _notyfService.Error(sectionsResponse.Message);
-                return RedirectToAction(nameof(Index));
-            }
 
             RoleDTO dto = new RoleDTO
             {
                 Permissions = permissionsResponse.Result,
-                Sections = sectionsResponse.Result
             };
             return View(dto);
         }
@@ -78,15 +71,7 @@ namespace MyPastelitos.Web.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                Response<List<SectionsForRoleDTO>> sectionsResponse = await _rolesService.GetSectionsAsync();
-                if (!sectionsResponse.IsSuccess)
-                {
-                    _notyfService.Error(sectionsResponse.Message);
-                    return RedirectToAction(nameof(Index));
-                }
-
                 dto.Permissions = permissionsResponse.Result;
-                dto.Sections = sectionsResponse.Result;
 
                 return View(dto);
             }
@@ -104,15 +89,8 @@ namespace MyPastelitos.Web.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                Response<List<SectionsForRoleDTO>> sectionsResponse = await _rolesService.GetSectionsAsync();
-                if (!sectionsResponse.IsSuccess)
-                {
-                    _notyfService.Error(sectionsResponse.Message);
-                    return RedirectToAction(nameof(Index));
-                }
 
                 dto.Permissions = permissionsResponse.Result;
-                dto.Sections = sectionsResponse.Result;
 
                 return View(dto);
             }
@@ -150,15 +128,7 @@ namespace MyPastelitos.Web.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                Response<List<SectionsForRoleDTO>> sectionsResponse = await _rolesService.GetSectionsAsync();
-                if (!sectionsResponse.IsSuccess)
-                {
-                    _notyfService.Error(sectionsResponse.Message);
-                    return RedirectToAction(nameof(Index));
-                }
-
                 dto.Permissions = permissionsResponse.Result;
-                dto.Sections = sectionsResponse.Result;
                 return View(dto);
             }
 
@@ -175,15 +145,7 @@ namespace MyPastelitos.Web.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                Response<List<SectionsForRoleDTO>> sectionsResponse = await _rolesService.GetSectionsAsync();
-                if (!sectionsResponse.IsSuccess)
-                {
-                    _notyfService.Error(sectionsResponse.Message);
-                    return RedirectToAction(nameof(Index));
-                }
-
                 dto.Permissions = permissionsResponse.Result;
-                dto.Sections = sectionsResponse.Result;
                 return View(dto);
             }
 

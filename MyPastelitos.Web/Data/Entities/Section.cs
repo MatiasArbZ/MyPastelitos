@@ -24,8 +24,6 @@ namespace MyPastelitos.Web.Data.Entities
 
         public bool IsHidden { get; set; } = false;
 
-        public IEnumerable<RoleSection>? RoleSection { get; set; }
-
         public static implicit operator Section(List<SelectListItem>v)
         {
             throw new NotImplementedException();

@@ -20,8 +20,6 @@ namespace MyPastelitos.Web.Data
 
         public DbSet<RolePermission> RolePermissions { get; set; }
 
-        public DbSet<RoleSection> RoleSections { get; set; }
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             ConfigureKeys(builder);
@@ -45,19 +43,6 @@ namespace MyPastelitos.Web.Data
                 .WithMany(r => r.RolePermissions)
                 .HasForeignKey(rp => rp.PrivateRecipeRoleId);
 
-            //Role section
-            builder.Entity<RoleSection>()
-    .HasKey(rs => new { rs.PrivateRecipeRoleId, rs.SectionId });
-
-            builder.Entity<RoleSection>()
-                .HasOne(rs => rs.Section)
-                .WithMany(s => s.RoleSection)
-                .HasForeignKey(rs => rs.SectionId);
-
-            builder.Entity<RoleSection>()
-                .HasOne(rs => rs.PrivateRecipeRole)
-                .WithMany(r => r.RoleSection)
-                .HasForeignKey(rs => rs.PrivateRecipeRoleId);
         }
         private void ConfigureIdexes(ModelBuilder builder)
         {

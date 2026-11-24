@@ -45,7 +45,6 @@
         
         
     </div>
-        @await Html.PartialAsync("_Sections", Model)
         @await Html.PartialAsync("_Permissions", Model)
 
         <div class="text-center mt-3">
@@ -61,29 +60,21 @@
     }
 
     <script>
-        $(document).ready(function () {
+                   $(document).ready(function () {
 
-            $("#btnEditRole").click(function () {
+                $("#frmEditRole").on("submit", function () {
 
-                const permissions = $('.permission:checked');
-                let permissionIds = [];
+                    const permissions = $('.permission:checked');
+                    let permissionIds = [];
 
-                permissions.each(function () {
-                    const permissionId = $(this).data('permission-id');
-                    permissionIds.push(permissionId);
-                });const Sections = $('.section:checked');
-                let sectionIds = [];
+                    permissions.each(function () {
+                        const permissionId = $(this).data('permission-id');
+                        permissionIds.push(permissionId);
+                    });
 
-                Sections.each(function () {
-                    const sectionId = $(this).data('section-id');
-                    sectionIds.push(sectionId);
+                    $('#permissionIds').val(JSON.stringify(permissionIds));
                 });
 
-
-                $('#permissionIds').val(JSON.stringify(permissionIds));
-                $('#sectionIds').val(JSON.stringify(sectionIds));
             });
-
-        });
     </script>
 }

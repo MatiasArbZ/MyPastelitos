@@ -6,7 +6,6 @@ using MyPastelitos.Web.Core.Pagination;
 using MyPastelitos.Web.Data;
 using MyPastelitos.Web.Data.Entities;
 using MyPastelitos.Web.DTOs.Role;
-using MyPastelitos.Web.DTOs.Section;
 using MyPastelitos.Web.Services.Abstractions;
 using Newtonsoft.Json;
 
@@ -58,26 +57,6 @@ namespace MyPastelitos.Web.Services.Implementations
                         await _context.RolePermissions.AddAsync(rolePermission);
                     }
 
-                    //sections
-
-                    List<Guid> sectionIds = [];
-
-                    if (!string.IsNullOrEmpty(dto.SectionsIds))
-                    {
-                        sectionIds = JsonConvert.DeserializeObject<List<Guid>>(dto.SectionsIds);
-                    }
-
-                    foreach (Guid sectionId in sectionIds)
-                    {
-                        RoleSection roleSection = new RoleSection
-                        {
-                            PrivateRecipeRoleId = role.Id,
-                            SectionId = sectionId
-                        };
-
-                        await _context.RoleSections.AddAsync(roleSection);
-                    }
-
                     await _context.SaveChangesAsync();
 
                     transaction.Commit();
@@ -123,17 +102,7 @@ namespace MyPastelitos.Web.Services.Implementations
                 Selected = _context.RolePermissions.Any(rp => rp.PermissionId == p.Id && rp.PrivateRecipeRoleId == dto.Id)
             }).ToListAsync();
 
-
-            List<SectionsForRoleDTO> sections = await _context.Sections.Where(s => !s.IsHidden)
-                                                                       .Select(s => new SectionsForRoleDTO
-            {
-                Id = s.Id,
-                Name = s.Name,
-                Description = s.Description,
-                Selected = _context.RoleSections.Any(rs => rs.SectionId == s.Id && rs.PrivateRecipeRoleId == dto.Id)
-            }).ToListAsync();
             dto.Permissions = permissions;
-            dto.Sections = sections;
             return Response<RoleDTO>.Success(dto);
 
         }
@@ -169,24 +138,6 @@ namespace MyPastelitos.Web.Services.Implementations
             return Response<List<PermissionsForRoleDTO>>.Success(permissions);
         }
 
-        public async Task<Response<List<SectionsForRoleDTO>>> GetSectionsAsync()
-        {
-            Response<List<SectionDTO>> sectionsResponse = await GetCompleteListAsync<SectionDTO, Section>();
-            if (!sectionsResponse.IsSuccess)
-            {
-                return Response<List<SectionsForRoleDTO>>.Failure(sectionsResponse.Message, sectionsResponse.Errors);
-            }
-            List<SectionsForRoleDTO> sections = sectionsResponse.Result.Where(s => !s.IsHidden)
-                                                                       .Select(s => new SectionsForRoleDTO
-            {
-                Id = s.Id,
-                Description = s.Description,
-                Name = s.Name,
-                Selected = false,
-            }).ToList();
-
-            return Response<List<SectionsForRoleDTO>>.Success(sections);
-        }
 
         public async Task<Response<RoleDTO>> UpdateAsync(RoleDTO dto)
         {
@@ -226,31 +177,7 @@ namespace MyPastelitos.Web.Services.Implementations
                     await _context.RolePermissions.AddAsync(rolePermission);
                 }
 
-                // Sections
-                List<Guid> sectionIds = [];
-
-                if (!string.IsNullOrEmpty(dto.SectionsIds))
-                {
-                    sectionIds = JsonConvert.DeserializeObject<List<Guid>>(dto.SectionsIds);
-                }
-
-                // Delete old permissions
-                List<RoleSection> oldRoleSections = await _context.RoleSections.Where(rp => rp.PrivateRecipeRoleId == role.Id)
-                                                                               .ToListAsync();
-                _context.RoleSections.RemoveRange(oldRoleSections);
-
-                // create new sections
-                foreach (Guid sectionId in sectionIds)
-                {
-                    RoleSection roleSection = new RoleSection
-                    {
-                        PrivateRecipeRoleId = role.Id,
-                        SectionId = sectionId
-                    };
-
-                    await _context.RoleSections.AddAsync(roleSection);
-                }
-
+                
                 await _context.SaveChangesAsync();
 
                 return Response<RoleDTO>.Success(dto, "Rol actualizado con éxito");

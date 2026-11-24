@@ -46,7 +46,6 @@
    
     </div>
         
-        @await Html.PartialAsync("_Sections", Model)
         @await Html.PartialAsync("_Permissions", Model)
 
         <div class="text-center mt-3">
@@ -56,37 +55,27 @@
     </section>
 
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @section Scripts {
+        @{
+            await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        }
 
-    <script>
-        $(document).ready(function () {
+        <script>
+            $(document).ready(function () {
 
-            $("#btnCreateRole").click(function () {
+                $("#frmCreateRole").on("submit", function () {
 
-                const permissions = $('.permission:checked');
-                let permissionIds = [];
+                    const permissions = $('.permission:checked');
+                    let permissionIds = [];
 
-                permissions.each(function () {
-                    const permissionId = $(this).data('permission-id');
-                    permissionIds.push(permissionId);
+                    permissions.each(function () {
+                        const permissionId = $(this).data('permission-id');
+                        permissionIds.push(permissionId);
+                    });
+
+                    $('#permissionIds').val(JSON.stringify(permissionIds));
                 });
 
-                const Sections = $('.section:checked');
-                let sectionIds = [];
-
-                Sections.each(function () {
-                    const sectionId = $(this).data('section-id');
-                    sectionIds.push(sectionId);
-                });
-
-
-                $('#permissionIds').val(JSON.stringify(permissionIds));
-                $('#sectionIds').val(JSON.stringify(sectionIds));
             });
-
-        });
-    </script>
-}
+        </script>
+    }
