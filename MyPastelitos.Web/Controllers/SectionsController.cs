@@ -68,7 +68,7 @@ namespace MyPastelitos.Web.Controllers
             }
 
             _notyfService.Success(response.Message);
-            return RedirectToAction(nameof(Index));
+            return Redirect("/Sections/Index");
         }
 
 
@@ -81,7 +81,7 @@ namespace MyPastelitos.Web.Controllers
                 if (!response.IsSuccess)
             {
                 _notyfService.Error(response.Message);
-                return RedirectToAction(nameof(Index));
+                return Redirect("/Sections/Index");
             }
 
                 UpdateSectionDTO dto= new UpdateSectionDTO
@@ -116,7 +116,7 @@ namespace MyPastelitos.Web.Controllers
             }
 
             _notyfService.Success(response.Message);
-            return RedirectToAction(nameof(Index));
+            return Redirect("/Sections/Index");
         }
 
 
@@ -136,7 +136,7 @@ namespace MyPastelitos.Web.Controllers
                 _notyfService.Success(response.Message);
             }
 
-            return RedirectToAction(nameof(Index));
+            return Redirect("/Sections/Index");
         }
 
 
@@ -156,7 +156,7 @@ namespace MyPastelitos.Web.Controllers
                 _notyfService.Success(response.Message);
             }
 
-            return RedirectToAction(nameof(Index));
+            return Redirect("/Sections/Index");
         }
 
     }

@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MyPastelitos.Web.Core;
 using MyPastelitos.Web.Data;
 using MyPastelitos.Web.Data.Entities;
 using MyPastelitos.Web.DTOs.Account;
 using MyPastelitos.Web.DTOs.User;
 using MyPastelitos.Web.Services.Abstractions;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace MyPastelitos.Web.Services.Implementations
 {
@@ -18,22 +22,24 @@ namespace MyPastelitos.Web.Services.Implementations
 
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly DataContext _Context;
-
+        private readonly IConfiguration _configuration;
+            
 
         public AccountService(UserManager<User> userManager,
-                                                SignInManager<User> signInManager,
-                                                IUsersService usersService,
-                                                IHttpContextAccessor httpContextAccessor,
-                                                DataContext context)
-
+                              SignInManager<User> signInManager,
+                              IUsersService usersService,
+                              IHttpContextAccessor httpContextAccessor,
+                              DataContext context,
+                              IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _usersService = usersService;
             _httpContextAccessor = httpContextAccessor;
             _Context = context;
+            _configuration = configuration;
         }
-        
+
         public bool AccountUserIsAuthenticated()
         {
             ClaimsPrincipal? user = _httpContextAccessor.HttpContext?.User;
@@ -44,21 +50,22 @@ namespace MyPastelitos.Web.Services.Implementations
         {
             ClaimsPrincipal? claimUser = _httpContextAccessor.HttpContext?.User;
 
-
-                    // confirmar identidad (de la sesion)
+            // Check identity (session)
             if (claimUser is null)
             {
                 return false;
             }
+
             string email = claimUser.Identity!.Name!;
 
             Response<User> response = await _usersService.GetUserByEmailAsync(email);
 
             if (!response.IsSuccess || response.Result is null)
             {
-                    return false;
+                return false;
 
-               }
+            }
+
             User user = response.Result;
 
             if (user.PrivateRecipeRole.Name == Env.SUPER_ADMIN_ROLE_NAME)
@@ -67,22 +74,21 @@ namespace MyPastelitos.Web.Services.Implementations
             }
 
             return await _Context.Permissions.Include(p => p.RolePermissions)
-                                              .AnyAsync(p => p.Code == code &&
-                                                     p.RolePermissions.Any(rp => rp.PrivateRecipeRoleId == user.PrivateRecipeRoleId));
-            
+                                             .AnyAsync(p => p.Code == code
+                                                         && p.RolePermissions.Any(rp => rp.PrivateRecipeRoleId == user.PrivateRecipeRoleId));
         }
 
         public async Task<bool> AccountUserIsSuperAdminAsync()
         {
-            
+
             ClaimsPrincipal? claimUser = _httpContextAccessor.HttpContext?.User;
 
-
-            // confirmar identidad (de la sesion)
+            // Check identity (session)
             if (claimUser is null)
             {
                 return false;
             }
+
             string email = claimUser.Identity!.Name!;
 
             Response<User> response = await _usersService.GetUserByEmailAsync(email);
@@ -92,6 +98,7 @@ namespace MyPastelitos.Web.Services.Implementations
                 return false;
 
             }
+
             User user = response.Result;
 
             return user.PrivateRecipeRole.Name == Env.SUPER_ADMIN_ROLE_NAME;
@@ -103,17 +110,19 @@ namespace MyPastelitos.Web.Services.Implementations
 
             if (claimUser is null)
             {
-                return Response.Failure("NO existe sesion");
+                return Response.Failure("NO existe sesión");
             }
+
             string email = claimUser.Identity!.Name!;
 
             Response<User> response = await _usersService.GetUserByEmailAsync(email);
+
             if (!response.IsSuccess || response.Result is null)
             {
-                return Response.Failure("NO existe usuario"); 
+                return Response.Failure("NO existe usuario");
             }
 
-             User accountUser = response.Result;
+            User accountUser = response.Result;
 
             bool isCorrectPassword = await _usersService.CheckPasswordAsync(accountUser, dto.CurrentPassword);
 
@@ -130,8 +139,7 @@ namespace MyPastelitos.Web.Services.Implementations
                 return Response.Failure("Ha ocurrido un error al intentar actualizar la contraseña");
             }
 
-            return Response.Success("Contraseña Actualizada con exito");
-
+            return Response.Success("Contraseña actualizada con éxito");
         }
 
         public async Task<Response<IdentityResult>> ConfirmUserAsync(User user, string token)
@@ -145,23 +153,53 @@ namespace MyPastelitos.Web.Services.Implementations
             };
         }
 
-        public override bool Equals(object? obj)
-        {
-            return obj is AccountService service &&
-                   EqualityComparer<IUsersService>.Default.Equals(_usersService, service._usersService);
-        }
-
         public async Task<Response<string>> GenerateConfirmationTokenAsync(User user)
         {
             string result = await _userManager.GeneratePasswordResetTokenAsync(user);
 
             return Response<string>.Success(result);
-
         }
 
-        public override int GetHashCode()
+        public async Task<Response<UserTokenDTO>> LoginApiAsync(LoginDTO dto)
         {
-            return HashCode.Combine(_usersService);
+            SignInResult result = await _signInManager.PasswordSignInAsync(dto.Email, dto.Password, false, false);
+
+            if (result.Succeeded)
+            {
+                User user = await _userManager.FindByEmailAsync(dto.Email);
+                UserTokenDTO token = await BuildTokenAsync(dto.Email, user);
+
+                return Response<UserTokenDTO>.Success(token);
+            }
+
+            return Response<UserTokenDTO>.Failure("Usuario o contraseña incorrectos");
+        }
+
+        private async Task<UserTokenDTO> BuildTokenAsync(string email, User user)
+        {
+            List<Claim> claims = [
+                new Claim(ClaimTypes.Email, email),
+                new Claim(ClaimTypes.Name, email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim("userId", user.Id)
+            ];
+
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:SignKey"]));
+            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            DateTime expiration = DateTime.UtcNow.AddYears(100);
+
+            JwtSecurityToken token = new JwtSecurityToken(issuer: _configuration["JWT:Issuer"],
+                                                          audience: _configuration["JWT: Audience"],
+                                                          claims: claims,
+                                                          expires: expiration,
+                                                          signingCredentials: creds);
+
+            return new UserTokenDTO
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                ExpiresAt= expiration
+            };
         }
 
         public async Task<Response<SignInResult>> LoginAsync(LoginDTO dto)
@@ -184,16 +222,15 @@ namespace MyPastelitos.Web.Services.Implementations
         {
             try
             {
-
-
                 ClaimsPrincipal? claimUser = _httpContextAccessor.HttpContext?.User;
 
 
-                // confirmar identidad (de la sesion)
+                // Check identity (session)
                 if (claimUser is null)
                 {
                     return Response<AccountUserDTO>.Failure();
                 }
+
                 string email = claimUser.Identity!.Name!;
 
                 Response<User> response = await _usersService.GetUserByEmailAsync(email);
@@ -201,16 +238,15 @@ namespace MyPastelitos.Web.Services.Implementations
                 if (!response.IsSuccess || response.Result is null)
                 {
                     return Response<AccountUserDTO>.Failure();
-
                 }
+
                 User accountUser = response.Result;
 
-                if (accountUser.Id != dto.Id.ToString()) 
-
+                if (accountUser.Id != dto.Id.ToString())
                 {
                     return Response<AccountUserDTO>.Failure();
                 }
-                
+
                 UserDTO userDto = new UserDTO
                 {
                     Id = dto.Id,
@@ -218,7 +254,7 @@ namespace MyPastelitos.Web.Services.Implementations
                     LastName = dto.LastName,
                     Phone = dto.Phone,
                     Photo = dto.Photo,
-                    Document = dto.Document,
+                    Document = dto.Document
                 };
 
                 Response<UserDTO> userDtoResponse = await _usersService.UpdateUserAsync(userDto);
@@ -229,15 +265,11 @@ namespace MyPastelitos.Web.Services.Implementations
                 }
 
                 return Response<AccountUserDTO>.Failure(userDtoResponse.Message, userDtoResponse.Errors);
-
             }
             catch (Exception ex)
             {
                 return Response<AccountUserDTO>.Failure(ex);
             }
         }
-            
-        
     }
 }
-

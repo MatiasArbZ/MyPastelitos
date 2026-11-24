@@ -1,4 +1,6 @@
 ﻿using Azure.Core;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MyPastelitos.Web.Core;
@@ -11,6 +13,7 @@ namespace MyPastelitos.Web.Controllers.Api
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class SectionsController : ApiController
     {
         private readonly ISectionsService _sectionsService;
@@ -20,14 +23,15 @@ namespace MyPastelitos.Web.Controllers.Api
             _sectionsService = sectionsService;
         }
         [HttpGet]
-
-        public async Task<IActionResult> Index([FromQuery] PaginationRequest request)
+        [ApiAuthorize("sections.show")]
+        public async Task<IActionResult> GetAll([FromQuery] PaginationRequest request)
         {
             Response<PaginationResponse<SectionDTO>> response = await _sectionsService.GetPaginationAsync(request);
             return ControllerBasicValidation(response);
         }
 
         [HttpPost]
+        [ApiAuthorize("sections.create")]
         public async Task<IActionResult> Create([FromBody] CreateSectionDTO dto)
         {
             Response<CreateSectionDTO> response = await _sectionsService.CreateSection(dto);
@@ -35,6 +39,7 @@ namespace MyPastelitos.Web.Controllers.Api
         }
 
         [HttpPut]
+        [ApiAuthorize("sections.edit")]
         public async Task<IActionResult> Edit([FromForm] UpdateSectionDTO dto)
         {
             Response<SectionDTO> response = await _sectionsService.UpdateAsync(dto);
@@ -42,6 +47,7 @@ namespace MyPastelitos.Web.Controllers.Api
         }
 
         [HttpDelete("{id}")]
+        [ApiAuthorize("sections.delete")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             Response response = await _sectionsService.DeleteAsync(id);

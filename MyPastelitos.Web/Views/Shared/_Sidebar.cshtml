@@ -14,9 +14,10 @@
         @if (await _accountService.AccountUserIsAuthorizedAsync("sections.show"))
         {
             <li class="nav-item">
-                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Sections" ? "" : "collapsed")" asp-controller="Sections" asp-action="Index">
-                    <i class="bi bi-cake2"></i>
-                    <span>Productos</span>
+                <a class="nav-link @(ViewContext.RouteData.Values["controller"]?.ToString() == "Sections" ? "" : "collapsed")"
+                        href="/Sections/Index">
+                        <i class="bi bi-cake2"></i>
+                        <span>Productos</span>
                 </a>
             </li>
         }

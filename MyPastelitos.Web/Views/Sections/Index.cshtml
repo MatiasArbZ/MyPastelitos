@@ -31,7 +31,7 @@
                 @if (await _accountService.AccountUserIsAuthorizedAsync("sections.show"))
                 {
                   <div class="col-md-1"> 
-                        <a asp-action="Create" class="btn-primary"><i class="bi bi-plus-circle"></i> </a>
+                        <a href="/Sections/Create" class="btn-primary"><i class="bi bi-plus-circle"></i> </a>
 
                   </div>
                 }
@@ -41,7 +41,7 @@
 
         <div class="card-body at-3">
                 
-              <form asp-action="Index" class="navbar-search" method="get">  
+              <form action="/Sections/Index" class="navbar-search" method="get">
             
                  <input type="hidden" name="Page" value="@Model.CurrentPage"/>  
 
@@ -102,14 +102,14 @@
                                 {
 
 
-                                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@item.Id">
+                                    <a class="btn btn-sm btn-warning" href="/Sections/Edit/@item.Id">
                                         <i class="bi bi-pencil"></i>
                                     </a>
 
 
                                     @if (item.IsHidden)
                                     {
-                                        <form asp-action="Toggle" method="POST" style="Display: contents;">
+                                        <form action="/Sections/Toggle" method="POST" style="Display: contents;">
                                             <input type="hidden" name="SectionId" value="@item.Id" />
                                             <input type="hidden" name="Hide" value="false" />
 
@@ -123,7 +123,7 @@
                                     }
                                     else
                                     {
-                                        <form asp-action="Toggle" method="POST" style="Display: contents;">
+                                        <form action="/Sections/Toggle" method="POST" style="Display: contents;">
                                             <input type="hidden" name="SectionId" value="@item.Id" />
                                             <input type="hidden" name="Hide" value="true" />
 
@@ -138,7 +138,7 @@
                                 }
                                     @if (await _accountService.AccountUserIsAuthorizedAsync("sections.delete"))
                                 {
-                                    <form asp-action="Delete" method="POST" style="Display: contents;" asp-route-Id="@item.Id"> 
+                                    <form action="/Sections/Delete/@item.Id" method="POST" style="Display: contents;"> 
                                         <button type="submit" class = "btn btn-sm btn-danger btnDelete">
                                             <i class="bi bi-trash"></i>
                                         </button>
