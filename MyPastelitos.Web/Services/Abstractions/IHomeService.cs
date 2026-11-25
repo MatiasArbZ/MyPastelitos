@@ -10,6 +10,8 @@ namespace MyPastelitos.Web.Services.Abstractions
         public Task<Response<PaginationResponse<SectionDTO>>> GetSectionsAsync(PaginationRequest request);
         public Task<Response<SectionDTO>> GetSectionAsync(Guid id, PaginationRequest request);
         public Task<Response<RecipeDTO>> GetRecipeAsync(Guid id);
-       
+
+        public Task<Response<PaginationResponse<RecipeDTO>>> GetRecipesAsync   (PaginationRequest request);
+
     }
 }

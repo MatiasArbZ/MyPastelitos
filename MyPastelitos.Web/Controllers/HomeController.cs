@@ -34,15 +34,15 @@ namespace MyPastelitos.Web.Controllers
 
         [HttpGet]
 
+        [HttpGet]
         public async Task<IActionResult> Index([FromQuery] PaginationRequest request)
         {
-
-            Response<PaginationResponse<SectionDTO>> response = await _homeService.GetSectionsAsync(request);
+            Response<PaginationResponse<RecipeDTO>> response =
+                await _homeService.GetRecipesAsync(request);
 
             if (!response.IsSuccess)
             {
                 _notyfService.Error(response.Message);
-                //TODO: redirect to  CUSTOM error page
                 return RedirectToAction(nameof(Error));
             }
 

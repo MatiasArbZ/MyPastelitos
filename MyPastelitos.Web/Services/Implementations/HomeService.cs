@@ -86,7 +86,19 @@ namespace MyPastelitos.Web.Services.Implementations
             }
         }
 
-        //TODO : trANSPONSE GET USERRESPONSABILITY TO IACCOUNTSERVICE
+        public async Task<Response<PaginationResponse<RecipeDTO>>> GetRecipesAsync(
+    PaginationRequest request)
+        {
+            IQueryable<Recipe> query = _context.Recipe.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(request.Filter))
+            {
+                query = query.Where(r =>
+                    r.Name.ToLower().Contains(request.Filter.ToLower()));
+            }
+
+            return await GetPagedListAsync<RecipeDTO, Recipe>(request, query);
+        }
         public async Task<Response<PaginationResponse<SectionDTO>>> GetSectionsAsync(PaginationRequest request)
         {
             IQueryable<Section> query = _context.Sections
