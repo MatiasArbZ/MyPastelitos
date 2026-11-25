@@ -92,8 +92,18 @@ namespace MyPastelitos.Web.Data.Seeders
                     .FirstAsync(r => r.Name == BAKER_ROLE_NAME);
             }
 
+            string[] bakerPermissionCodes =
+            [
+                "sections.show",
+    "sections.create",
+    "sections.update",
+    "recipe.show",
+    "recipe.create",
+    "recipe.update"
+            ];
+
             List<Permission> permissions = await _context.Permissions
-                .Where(p => p.Module == "Producto" || p.Module == "Receta")
+                .Where(p => bakerPermissionCodes.Contains(p.Code))
                 .ToListAsync();
 
             foreach (Permission permission in permissions)
